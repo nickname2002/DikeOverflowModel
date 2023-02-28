@@ -14,6 +14,8 @@ public class SimulationView : Control
     private Label _simBar;
     private Label _simBarBorder;
     private Label _titleBox;
+    private Button _applyButton;
+    private Button _resetButton;
     
     // Simulation panel
     private Panel _sim;

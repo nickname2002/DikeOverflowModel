@@ -80,9 +80,6 @@ public class SettingsView : Control
         _titleBox.Text = "Settings";
         _titleBox.Font = new Font("Bahnschrift", 15);
 
-
-
-
         //Time title
         _timeTitle = new Label();
         _timeTitle.ClientSize = new Size(200, 30);
@@ -146,9 +143,6 @@ public class SettingsView : Control
         _timeFieldYear.Font = new Font("Bahnschrift", 11);
         _timeFieldYear.BorderStyle = BorderStyle.None;
 
-
-
-
         //Sea level title
         _seaTitle = new Label();
         _seaTitle.ClientSize = new Size(200, 30);
@@ -202,7 +196,6 @@ public class SettingsView : Control
         _seaRise.Font = new Font("Bahnschrift", 11);
         _seaRise.BorderStyle = BorderStyle.None;
 
-
         //Dike title
         _dikeTitle = new Label();
         _dikeTitle.ClientSize = new Size(200, 30);
@@ -230,7 +223,6 @@ public class SettingsView : Control
         _dikeInput.Font = new Font("Bahnschrift", 11);
         _dikeInput.BorderStyle = BorderStyle.None;
 
-
         //Graph title
         _graphTitle = new Label();
         _graphTitle.ClientSize = new Size(200, 30);
@@ -239,8 +231,6 @@ public class SettingsView : Control
         _graphTitle.ForeColor = Color.White;
         _graphTitle.Text = "Overflow graph";
         _graphTitle.Font = new Font("Bahnschrift", 13);
-
-
 
         //Apply button
         _applyButton = new Button();
@@ -266,8 +256,7 @@ public class SettingsView : Control
 
         //Overflow graph 
         _overflowGraph = new OverflowGraph(); 
-
-
+        
         // Add all controls
         this.Controls.Add(_sideBorder);
         this.Controls.Add(_titleBox);
