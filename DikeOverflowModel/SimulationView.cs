@@ -99,5 +99,7 @@ public class SimulationView : Control
         this.Controls.Add(_logView);
         this.Controls.Add(_settingsView);
         this.Controls.Add(_sim);
+        
+        this._logView.UpdateData(_settingsView.DikeHeight);
     }
 }

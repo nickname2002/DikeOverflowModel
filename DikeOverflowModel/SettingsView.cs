@@ -3,6 +3,36 @@
 public class SettingsView : Control
 {
     private OverflowGraph _overflowGraph;
+
+    public string Date
+    {
+        get
+        {
+            return this._date;
+        }
+    }
+
+    public double RisingSpeed
+    {
+        get
+        {
+            return _risingSpeed;
+        }
+    }
+    
+    public double DikeHeight
+    {
+        get
+        {
+            return this._dikeHeight;
+        }
+    }
+
+    private string _date;
+    private bool _expChecked;
+    private bool _posChecked;
+    private double _risingSpeed;
+    private double _dikeHeight;
     
     // Component data
     private const int WIDTH = 600;
@@ -16,14 +46,12 @@ public class SettingsView : Control
 
     //Time data
     private Label _timeTitle;
-    private Label _timeDay;
+    private Label _timeLabel;
     private Label _timeMonth;
     private Label _timeYear;
 
     //Time input fields
-    private TextBox _timeFieldDay;    
-    private TextBox _timeFieldMonth; 
-    private TextBox _timeFieldYear;
+    private DateTimePicker _timeSelect;    
 
     //Sea level data
     private Label _seaTitle;
@@ -38,7 +66,7 @@ public class SettingsView : Control
 
     //Dike data
     private Label _dikeTitle;
-    private Label _dikeHeight;
+    private Label _dikeHeightBox;
     private TextBox _dikeInput;
 
     //Graph title
@@ -89,64 +117,27 @@ public class SettingsView : Control
         _timeTitle.Text = "Time";
         _timeTitle.Font = new Font("Bahnschrift", 13);
 
-        //Time day title
-        _timeDay = new Label();
-        _timeDay.ClientSize = new Size(200, 30);
-        _timeDay.Location = new Point(50, 90);
-        _timeDay.BackColor = Color.FromArgb(100, 100, 100);
-        _timeDay.ForeColor = Color.LightGray;
-        _timeDay.Text = "Day";
-        _timeDay.Font = new Font("Bahnschrift", 11);
+        //Time select title
+        _timeLabel = new Label();
+        _timeLabel.ClientSize = new Size(200, 30);
+        _timeLabel.Location = new Point(50, 90);
+        _timeLabel.BackColor = Color.FromArgb(100, 100, 100);
+        _timeLabel.ForeColor = Color.LightGray;
+        _timeLabel.Text = "Time";
+        _timeLabel.Font = new Font("Bahnschrift", 11);
 
-        //Time month title
-        _timeMonth = new Label();
-        _timeMonth.ClientSize = new Size(200, 30);
-        _timeMonth.Location = new Point(50, 120);
-        _timeMonth.BackColor = Color.FromArgb(100, 100, 100);
-        _timeMonth.ForeColor = Color.LightGray;
-        _timeMonth.Text = "Month";
-        _timeMonth.Font = new Font("Bahnschrift", 11);
-
-        //Time year title
-        _timeYear = new Label();
-        _timeYear.ClientSize = new Size(200, 30);
-        _timeYear.Location = new Point(50, 150);
-        _timeYear.BackColor = Color.FromArgb(100, 100, 100);
-        _timeYear.ForeColor = Color.LightGray;
-        _timeYear.Text = "Year";
-        _timeYear.Font = new Font("Bahnschrift", 11);
-
-        //Day input field
-        _timeFieldDay = new TextBox();
-        _timeFieldDay.ClientSize = new Size(150, 30);
-        _timeFieldDay.Location = new Point(400, 90);
-        _timeFieldDay.BackColor = Color.FromArgb(200, 200, 200);
-        _timeFieldDay.ForeColor = Color.Black;
-        _timeFieldDay.Font = new Font("Bahnschrift", 11);
-        _timeFieldDay.BorderStyle = BorderStyle.None;
-
-        //Month input field
-        _timeFieldMonth = new TextBox();
-        _timeFieldMonth.ClientSize = new Size(150, 30);
-        _timeFieldMonth.Location = new Point(400, 120);
-        _timeFieldMonth.BackColor = Color.FromArgb(200, 200, 200);
-        _timeFieldMonth.ForeColor = Color.Black;
-        _timeFieldMonth.Font = new Font("Bahnschrift", 11);
-        _timeFieldMonth.BorderStyle = BorderStyle.None;
-
-        //Year input field
-        _timeFieldYear = new TextBox();
-        _timeFieldYear.ClientSize = new Size(150, 30);
-        _timeFieldYear.Location = new Point(400, 150);
-        _timeFieldYear.BackColor = Color.FromArgb(200, 200, 200);
-        _timeFieldYear.ForeColor = Color.Black;
-        _timeFieldYear.Font = new Font("Bahnschrift", 11);
-        _timeFieldYear.BorderStyle = BorderStyle.None;
+        // Time input field
+        _timeSelect = new DateTimePicker();
+        _timeSelect.ClientSize = new Size(275, 30);
+        _timeSelect.Location = new Point(275, 90);
+        _timeSelect.BackColor = Color.FromArgb(200, 200, 200);
+        _timeSelect.ForeColor = Color.Black;
+        _timeSelect.Font = new Font("Bahnschrift", 11);
 
         //Sea level title
         _seaTitle = new Label();
         _seaTitle.ClientSize = new Size(200, 30);
-        _seaTitle.Location = new Point(10, 200);
+        _seaTitle.Location = new Point(10, 150);
         _seaTitle.BackColor = Color.FromArgb(100, 100, 100);
         _seaTitle.ForeColor = Color.White;
         _seaTitle.Text = "Sea level";
@@ -155,7 +146,7 @@ public class SettingsView : Control
         //Sea graph mode title
         _seaExp = new Label();
         _seaExp.ClientSize = new Size(200, 30);
-        _seaExp.Location = new Point(50, 230);
+        _seaExp.Location = new Point(50, 180);
         _seaExp.BackColor = Color.FromArgb(100, 100, 100);
         _seaExp.ForeColor = Color.LightGray;
         _seaExp.Text = "Exponential";
@@ -164,7 +155,7 @@ public class SettingsView : Control
         //Sea level direction title
         _seaPos = new Label();
         _seaPos.ClientSize = new Size(200, 30);
-        _seaPos.Location = new Point(50, 260);
+        _seaPos.Location = new Point(50, 210);
         _seaPos.BackColor = Color.FromArgb(100, 100, 100);
         _seaPos.ForeColor = Color.LightGray;
         _seaPos.Text = "Positive";
@@ -173,24 +164,24 @@ public class SettingsView : Control
         //Sea level speed title
         _seaSpeed = new Label();
         _seaSpeed.ClientSize = new Size(200, 30);
-        _seaSpeed.Location = new Point(50, 290);
+        _seaSpeed.Location = new Point(50, 240);
         _seaSpeed.BackColor = Color.FromArgb(100, 100, 100);
         _seaSpeed.ForeColor = Color.LightGray;
-        _seaSpeed.Text = "Rising speed (m/v)";
+        _seaSpeed.Text = "Rising speed (cm/decade)";
         _seaSpeed.Font = new Font("Bahnschrift", 11);
 
         //Sea mode checkbox
         _seaMode = new CheckBox();
-        _seaMode.Location = new Point(535, 230);
+        _seaMode.Location = new Point(535, 180);
 
         //Sea direction checkbox
         _seaDirection = new CheckBox();
-        _seaDirection.Location = new Point(535, 260); 
+        _seaDirection.Location = new Point(535, 210); 
         
         //Sea level speed input field
         _seaRise = new TextBox();
         _seaRise.ClientSize = new Size(150, 30);
-        _seaRise.Location = new Point(400, 290);
+        _seaRise.Location = new Point(400, 240);
         _seaRise.BackColor = Color.FromArgb(200, 200, 200);
         _seaRise.ForeColor = Color.Black;
         _seaRise.Font = new Font("Bahnschrift", 11);
@@ -199,25 +190,25 @@ public class SettingsView : Control
         //Dike title
         _dikeTitle = new Label();
         _dikeTitle.ClientSize = new Size(200, 30);
-        _dikeTitle.Location = new Point(10, 340);
+        _dikeTitle.Location = new Point(10, 290);
         _dikeTitle.BackColor = Color.FromArgb(100, 100, 100);
         _dikeTitle.ForeColor = Color.White;
         _dikeTitle.Text = "Dike";
         _dikeTitle.Font = new Font("Bahnschrift", 13);
 
         //Dike height title
-        _dikeHeight = new Label();
-        _dikeHeight.ClientSize = new Size(200, 30);
-        _dikeHeight.Location = new Point(50, 370);
-        _dikeHeight.BackColor = Color.FromArgb(100, 100, 100);
-        _dikeHeight.ForeColor = Color.LightGray;
-        _dikeHeight.Text = "Height (m)";
-        _dikeHeight.Font = new Font("Bahnschrift", 11);
+        _dikeHeightBox = new Label();
+        _dikeHeightBox.ClientSize = new Size(200, 30);
+        _dikeHeightBox.Location = new Point(50, 320);
+        _dikeHeightBox.BackColor = Color.FromArgb(100, 100, 100);
+        _dikeHeightBox.ForeColor = Color.LightGray;
+        _dikeHeightBox.Text = "Height (m)";
+        _dikeHeightBox.Font = new Font("Bahnschrift", 11);
 
         //Sea level speed input field
         _dikeInput = new TextBox();
         _dikeInput.ClientSize = new Size(150, 30);
-        _dikeInput.Location = new Point(400, 370);
+        _dikeInput.Location = new Point(400, 320);
         _dikeInput.BackColor = Color.FromArgb(200, 200, 200);
         _dikeInput.ForeColor = Color.Black;
         _dikeInput.Font = new Font("Bahnschrift", 11);
@@ -226,7 +217,7 @@ public class SettingsView : Control
         //Graph title
         _graphTitle = new Label();
         _graphTitle.ClientSize = new Size(200, 30);
-        _graphTitle.Location = new Point(10, 420);
+        _graphTitle.Location = new Point(10, 370);
         _graphTitle.BackColor = Color.FromArgb(100, 100, 100);
         _graphTitle.ForeColor = Color.White;
         _graphTitle.Text = "Overflow graph";
@@ -255,7 +246,7 @@ public class SettingsView : Control
         _resetButton.FlatAppearance.BorderColor = Color.FromArgb(255, 87, 87);
 
         //Overflow graph 
-        _overflowGraph = new OverflowGraph(); 
+        _overflowGraph = new OverflowGraph(this); 
         
         // Add all controls
         this.Controls.Add(_sideBorder);
@@ -264,13 +255,8 @@ public class SettingsView : Control
         this.Controls.Add(_simBarBorder);
 
         this.Controls.Add(_timeTitle);
-        this.Controls.Add(_timeDay);
-        this.Controls.Add(_timeMonth);
-        this.Controls.Add(_timeYear);
-
-        this.Controls.Add(_timeFieldDay);
-        this.Controls.Add(_timeFieldMonth);
-        this.Controls.Add(_timeFieldYear);
+        this.Controls.Add(_timeLabel); ;
+        this.Controls.Add(_timeSelect);
 
         this.Controls.Add(_seaTitle);
         this.Controls.Add(_seaExp);
@@ -282,7 +268,7 @@ public class SettingsView : Control
         this.Controls.Add(_seaRise);
 
         this.Controls.Add(_dikeTitle);
-        this.Controls.Add(_dikeHeight);
+        this.Controls.Add(_dikeHeightBox);
         this.Controls.Add(_dikeInput);
 
         this.Controls.Add(_graphTitle); 
@@ -290,5 +276,30 @@ public class SettingsView : Control
 
         this.Controls.Add(_applyButton);
         this.Controls.Add(_resetButton); 
+        
+        // Events
+        this._applyButton.Click += _ApplyChanges;
+        this._resetButton.Click += _ResetSettings;
+        this._ResetSettings(null, null);
+    }
+    
+    private void _ApplyChanges(object? sender, EventArgs ea)
+    {
+        this._date = _timeSelect.Value.ToShortDateString();
+        this._expChecked = _seaMode.Checked;
+        this._posChecked = _seaDirection.Checked;
+        this._risingSpeed = Double.Parse(_seaRise.Text);
+        this._dikeHeight = Double.Parse(_dikeInput.Text);
+        this._overflowGraph.Update(this);
+    }
+
+    private void _ResetSettings(object? sender, EventArgs ea)
+    {
+        this._timeSelect.Value = DateTime.Now;
+        this._seaMode.Checked = false;
+        this._seaDirection.Checked = true;
+        this._seaRise.Text = 2.54.ToString();
+        this._dikeInput.Text = 7.ToString();
+        _ApplyChanges(this, ea);
     }
 }

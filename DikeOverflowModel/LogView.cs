@@ -17,16 +17,16 @@ public class LogView : Control
     private Label _logData;
     
     // Log properties
-    public int WaterHeight;
-    public int WaveReach;
-    public int HeightIn50Years;
+    public double WaterHeight;
+    public double WaveReach;
+    public double HeightIn50Years;
     public string OverflowDate;
-    public int DikeHeight;
+    public double DikeHeight;
     
     public LogView()
     {
         // Property initialization
-        this.WaterHeight = 0;
+        this.WaterHeight = 104;
         this.WaveReach = 0;
         this.HeightIn50Years = 0;
         this.OverflowDate = DateTime.Today.Date.ToShortDateString();
@@ -63,7 +63,6 @@ public class LogView : Control
         _logData.Location = new Point(10, 70);
         _logData.ForeColor = Color.White;
         _logData.Font = new Font("Bahnschrift", 12);
-        this.UpdateData();
 
         // Add all controls
         this.Controls.Add(_logData);
@@ -76,10 +75,12 @@ public class LogView : Control
     /// Updates the data in the log view
     /// TODO: Add variables for tracking
     /// </summary>
-    public void UpdateData()
+    public void UpdateData(double dikeHeight)
     {
+        this.DikeHeight = dikeHeight;
+        
         this._logData.Text = "";
-        this._logData.Text += $"Water height: {this.WaterHeight}\n\n";
+        this._logData.Text += $"Water height: {this.WaterHeight}cm\n\n";
         this._logData.Text += $"Wave reach: {this.WaveReach}\n\n";
         this._logData.Text += $"Height in 50 years: {this.HeightIn50Years}\n\n";
         this._logData.Text += $"Overflow date: {this.OverflowDate}\n\n";
