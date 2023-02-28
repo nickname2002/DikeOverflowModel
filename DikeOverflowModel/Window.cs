@@ -14,7 +14,7 @@ public class Window : Form
         // Disable resizable window
         this.MinimumSize = this.ClientSize;
         this.MaximumSize = this.ClientSize;
-        this.MinimizeBox = false;
+        this.MinimizeBox = true;
         this.MaximizeBox = false;
         
         // Add all controls

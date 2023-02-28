@@ -94,7 +94,7 @@ public class SettingsView : Control
         _timeDay.ClientSize = new Size(200, 30);
         _timeDay.Location = new Point(50, 90);
         _timeDay.BackColor = Color.FromArgb(100, 100, 100);
-        _timeDay.ForeColor = Color.White;
+        _timeDay.ForeColor = Color.LightGray;
         _timeDay.Text = "Day";
         _timeDay.Font = new Font("Bahnschrift", 11);
 
@@ -103,7 +103,7 @@ public class SettingsView : Control
         _timeMonth.ClientSize = new Size(200, 30);
         _timeMonth.Location = new Point(50, 120);
         _timeMonth.BackColor = Color.FromArgb(100, 100, 100);
-        _timeMonth.ForeColor = Color.White;
+        _timeMonth.ForeColor = Color.LightGray;
         _timeMonth.Text = "Month";
         _timeMonth.Font = new Font("Bahnschrift", 11);
 
@@ -112,7 +112,7 @@ public class SettingsView : Control
         _timeYear.ClientSize = new Size(200, 30);
         _timeYear.Location = new Point(50, 150);
         _timeYear.BackColor = Color.FromArgb(100, 100, 100);
-        _timeYear.ForeColor = Color.White;
+        _timeYear.ForeColor = Color.LightGray;
         _timeYear.Text = "Year";
         _timeYear.Font = new Font("Bahnschrift", 11);
 
@@ -157,7 +157,7 @@ public class SettingsView : Control
         _seaExp.ClientSize = new Size(200, 30);
         _seaExp.Location = new Point(50, 230);
         _seaExp.BackColor = Color.FromArgb(100, 100, 100);
-        _seaExp.ForeColor = Color.White;
+        _seaExp.ForeColor = Color.LightGray;
         _seaExp.Text = "Exponential";
         _seaExp.Font = new Font("Bahnschrift", 11);
 
@@ -166,7 +166,7 @@ public class SettingsView : Control
         _seaPos.ClientSize = new Size(200, 30);
         _seaPos.Location = new Point(50, 260);
         _seaPos.BackColor = Color.FromArgb(100, 100, 100);
-        _seaPos.ForeColor = Color.White;
+        _seaPos.ForeColor = Color.LightGray;
         _seaPos.Text = "Positive";
         _seaPos.Font = new Font("Bahnschrift", 11);
 
@@ -175,7 +175,7 @@ public class SettingsView : Control
         _seaSpeed.ClientSize = new Size(200, 30);
         _seaSpeed.Location = new Point(50, 290);
         _seaSpeed.BackColor = Color.FromArgb(100, 100, 100);
-        _seaSpeed.ForeColor = Color.White;
+        _seaSpeed.ForeColor = Color.LightGray;
         _seaSpeed.Text = "Rising speed (m/v)";
         _seaSpeed.Font = new Font("Bahnschrift", 11);
 
@@ -210,7 +210,7 @@ public class SettingsView : Control
         _dikeHeight.ClientSize = new Size(200, 30);
         _dikeHeight.Location = new Point(50, 370);
         _dikeHeight.BackColor = Color.FromArgb(100, 100, 100);
-        _dikeHeight.ForeColor = Color.White;
+        _dikeHeight.ForeColor = Color.LightGray;
         _dikeHeight.Text = "Height (m)";
         _dikeHeight.Font = new Font("Bahnschrift", 11);
 

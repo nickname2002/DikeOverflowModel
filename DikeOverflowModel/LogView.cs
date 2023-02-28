@@ -1,4 +1,6 @@
-﻿namespace DikeOverflowModel;
+﻿using System.Windows.Forms.VisualStyles;
+
+namespace DikeOverflowModel;
 
 public class LogView : Control
 {
@@ -11,8 +13,26 @@ public class LogView : Control
     private Label _simBarBorder;
     private Label _titleBox;
     
+    // Data container
+    private Label _logData;
+    
+    // Log properties
+    public int WaterHeight;
+    public int WaveReach;
+    public int HeightIn50Years;
+    public string OverflowDate;
+    public int DikeHeight;
+    
     public LogView()
     {
+        // Property initialization
+        this.WaterHeight = 0;
+        this.WaveReach = 0;
+        this.HeightIn50Years = 0;
+        this.OverflowDate = DateTime.Today.Date.ToShortDateString();
+        this.DikeHeight = 0;
+        
+        // Component properties
         this.BackColor = Color.FromArgb(100, 100, 100);
         this.Location = new Point(0, 600);
         this.ClientSize = new Size(WIDTH, HEIGHT);
@@ -37,9 +57,32 @@ public class LogView : Control
         _titleBox.Text = "Log";
         _titleBox.Font = new Font("Bahnschrift", 15);
         
+        // Logdata container
+        _logData = new Label();
+        _logData.ClientSize = new Size(WIDTH, HEIGHT - 30);
+        _logData.Location = new Point(10, 70);
+        _logData.ForeColor = Color.White;
+        _logData.Font = new Font("Bahnschrift", 12);
+        this.UpdateData();
+
         // Add all controls
+        this.Controls.Add(_logData);
         this.Controls.Add(_titleBox);
         this.Controls.Add(_simBar);
         this.Controls.Add(_simBarBorder);
+    }
+
+    /// <summary>
+    /// Updates the data in the log view
+    /// TODO: Add variables for tracking
+    /// </summary>
+    public void UpdateData()
+    {
+        this._logData.Text = "";
+        this._logData.Text += $"Water height: {this.WaterHeight}\n\n";
+        this._logData.Text += $"Wave reach: {this.WaveReach}\n\n";
+        this._logData.Text += $"Height in 50 years: {this.HeightIn50Years}\n\n";
+        this._logData.Text += $"Overflow date: {this.OverflowDate}\n\n";
+        this._logData.Text += $"Dike height: {this.DikeHeight}\n\n";
     }
 }

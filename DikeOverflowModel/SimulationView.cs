@@ -14,8 +14,9 @@ public class SimulationView : Control
     private Label _simBar;
     private Label _simBarBorder;
     private Label _titleBox;
-    private Button _applyButton;
-    private Button _resetButton;
+    private Label _dateBox;
+    private Button _playButton;
+    private Button _pauseButton;
     
     // Simulation panel
     private Panel _sim;
@@ -50,13 +51,48 @@ public class SimulationView : Control
         _titleBox.Text = "Simulation";
         _titleBox.Font = new Font("Bahnschrift", 15);
         
+        // Date
+        _dateBox = new Label();
+        _dateBox.ClientSize = new Size(100, 25);
+        _dateBox.Location = new Point(0, 60);
+        _dateBox.ForeColor = Color.White;
+        _dateBox.BackColor = Color.Black;
+        _dateBox.TextAlign = ContentAlignment.MiddleCenter;
+        _dateBox.Text = DateTime.Now.ToShortDateString();
+        _dateBox.Font = new Font("Bahnschrift", 12);
+
         // Simulation panel
         this._sim = new Panel();
         this._sim.ClientSize = new Size(SIMULATION_WIDTH, SIMULATION_HEIGHT);
         this._sim.Location = new Point(0, 8);
         this._sim.BackColor = Color.Black; // NOTE: Backcolor needs to be changed (maybe rect grid?)
         
+        // Play button
+        _playButton = new Button();
+        _playButton.ClientSize = new Size(60,45);
+        _playButton.Location = new Point(870, 5);
+        _playButton.BackColor = Color.FromArgb(115, 205, 105);
+        _playButton.ForeColor = Color.White;
+        _playButton.Text = "Play";
+        _playButton.Font = new Font("Bahnschrift", 10);
+        _playButton.FlatStyle = FlatStyle.Flat;
+        _playButton.FlatAppearance.BorderColor = Color.FromArgb(115, 205, 105);
+
+        // Pause button
+        _pauseButton = new Button();
+        _pauseButton.ClientSize = new Size(60, 45);
+        _pauseButton.Location = new Point(940, 5);
+        _pauseButton.BackColor = Color.FromArgb(87, 87, 255);
+        _pauseButton.ForeColor = Color.White;
+        _pauseButton.Text = "Pause";
+        _pauseButton.Font = new Font("Bahnschrift", 10);
+        _pauseButton.FlatStyle = FlatStyle.Flat;
+        _pauseButton.FlatAppearance.BorderColor = Color.FromArgb(0, 0, 255);
+        
         // Add all controls
+        this.Controls.Add(_dateBox);
+        this.Controls.Add(_playButton);
+        this.Controls.Add(_pauseButton);
         this.Controls.Add(_titleBox);
         this.Controls.Add(_simBar);
         this.Controls.Add(_simBarBorder);

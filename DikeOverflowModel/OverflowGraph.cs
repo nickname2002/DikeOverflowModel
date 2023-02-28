@@ -1,10 +1,10 @@
 ﻿namespace DikeOverflowModel;
 
-public class OverflowGraph : Control
+public class OverflowGraph : Panel
 {
     //Component data
-    private const int WIDTH = 425;
-    private const int HEIGHT = 225;
+    private const int WIDTH = 540;
+    private const int HEIGHT = 300;
 
     //UI components 
     private Label _graphBorder;
@@ -14,7 +14,7 @@ public class OverflowGraph : Control
     public OverflowGraph()
     {
         this.ClientSize = new Size(WIDTH, HEIGHT);
-        this.Location = new Point(80, 470);
+        this.Location = new Point(20, 460);
         this.BackColor = Color.White;  
 
         //Add all Controls
