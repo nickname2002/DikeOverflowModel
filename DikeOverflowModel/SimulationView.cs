@@ -70,7 +70,7 @@ public class SimulationView : Control
         // Play button
         _playButton = new Button();
         _playButton.ClientSize = new Size(60,45);
-        _playButton.Location = new Point(870, 5);
+        _playButton.Location = new Point(860, 5);
         _playButton.BackColor = Color.FromArgb(115, 205, 105);
         _playButton.ForeColor = Color.White;
         _playButton.Text = "Play";
@@ -80,8 +80,8 @@ public class SimulationView : Control
 
         // Pause button
         _pauseButton = new Button();
-        _pauseButton.ClientSize = new Size(60, 45);
-        _pauseButton.Location = new Point(940, 5);
+        _pauseButton.ClientSize = new Size(70, 45);
+        _pauseButton.Location = new Point(930, 5);
         _pauseButton.BackColor = Color.FromArgb(87, 87, 255);
         _pauseButton.ForeColor = Color.White;
         _pauseButton.Text = "Pause";

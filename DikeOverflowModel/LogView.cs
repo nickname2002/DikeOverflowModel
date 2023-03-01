@@ -29,7 +29,7 @@ public class LogView : Control
         this.WaterHeight = 104;
         this.WaveReach = 0;
         this.HeightIn50Years = 0;
-        this.OverflowDate = DateTime.Today.Date.ToShortDateString();
+        this.OverflowDate = null;
         this.DikeHeight = 0;
         
         // Component properties
