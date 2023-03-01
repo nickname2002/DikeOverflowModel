@@ -87,6 +87,7 @@ public class SimulationView : Control
         _pauseButton.Text = "Pause";
         _pauseButton.Font = new Font("Bahnschrift", 10);
         _pauseButton.FlatStyle = FlatStyle.Flat;
+        _pauseButton.TextAlign = ContentAlignment.MiddleCenter;
         _pauseButton.FlatAppearance.BorderColor = Color.FromArgb(0, 0, 255);
         
         // Add all controls
