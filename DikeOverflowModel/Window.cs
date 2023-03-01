@@ -6,7 +6,7 @@ public class Window : Form
     
     public Window()
     {
-        this.ClientSize = new Size(1600, 900);
+        this.ClientSize = new Size(1600, 930);
         this.Text = "DikeSim";
         this.DoubleBuffered = true;
         this._simulationView = new SimulationView();

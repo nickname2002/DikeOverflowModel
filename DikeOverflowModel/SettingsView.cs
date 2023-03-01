@@ -1,8 +1,21 @@
-﻿namespace DikeOverflowModel;
+﻿using System.Net.Mime;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.Pkcs;
+using System.Windows.Forms.VisualStyles;
+
+namespace DikeOverflowModel;
 
 public class SettingsView : Control
 {
     private OverflowGraph _overflowGraph;
+    private string _date;
+    private bool _expChecked;
+    private bool _posChecked;
+    private double _risingSpeed;
+    private double _dikeHeight;
+    private int _amountOfYears;
+    private double _minHeight;
+    private double _maxHeight;
 
     public string Date
     {
@@ -28,12 +41,30 @@ public class SettingsView : Control
         }
     }
 
-    private string _date;
-    private bool _expChecked;
-    private bool _posChecked;
-    private double _risingSpeed;
-    private double _dikeHeight;
+    public int YearAmountGraph
+    {
+        get
+        {
+            return this._amountOfYears;
+        }
+    }
+
+    public double MinHeightGraph
+    {
+        get
+        {
+            return this._minHeight;
+        }
+    }
     
+    public double MaxHeightGraph
+    {
+        get
+        {
+            return this._maxHeight;
+        }
+    }
+
     // Component data
     private const int WIDTH = 600;
     private const int HEIGHT = 900;
@@ -72,6 +103,14 @@ public class SettingsView : Control
     //Graph title
     private Label _graphTitle; 
 
+    // Graph data
+    private Label _yearAmountLabel;
+    private TextBox _yearAmountInput;
+    private Label _minHeightLabel;
+    private TextBox _minHeightInput;
+    private Label _maxHeightLabel;
+    private TextBox _maxHeightInput;
+    
     //Buttons
     private Button _applyButton;
     private Button _resetButton;
@@ -222,11 +261,60 @@ public class SettingsView : Control
         _graphTitle.ForeColor = Color.White;
         _graphTitle.Text = "Overflow graph";
         _graphTitle.Font = new Font("Bahnschrift", 13);
+        
+        // Graph data
+        _yearAmountLabel = new Label();
+        _yearAmountLabel.ClientSize = new Size(200, 30);
+        _yearAmountLabel.Location = new Point(50, 400);
+        _yearAmountLabel.BackColor = Color.FromArgb(100, 100, 100);
+        _yearAmountLabel.ForeColor = Color.LightGray;
+        _yearAmountLabel.Text = "Amount of years";
+        _yearAmountLabel.Font = new Font("Bahnschrift", 11);
+
+        _yearAmountInput = new TextBox();
+        _yearAmountInput.ClientSize = new Size(150, 30);
+        _yearAmountInput.Location = new Point(400, 400);
+        _yearAmountInput.BackColor = Color.FromArgb(200, 200, 200);
+        _yearAmountInput.ForeColor = Color.Black;
+        _yearAmountInput.Font = new Font("Bahnschrift", 11);
+        _yearAmountInput.BorderStyle = BorderStyle.None;
+
+        _minHeightLabel = new Label();
+        _minHeightLabel.ClientSize = new Size(200, 30);
+        _minHeightLabel.Location = new Point(50, 430);
+        _minHeightLabel.BackColor = Color.FromArgb(100, 100, 100);
+        _minHeightLabel.ForeColor = Color.LightGray;
+        _minHeightLabel.Text = "Minimum height";
+        _minHeightLabel.Font = new Font("Bahnschrift", 11);
+        
+        _minHeightInput = new TextBox();
+        _minHeightInput.ClientSize = new Size(150, 30);
+        _minHeightInput.Location = new Point(400, 430);
+        _minHeightInput.BackColor = Color.FromArgb(200, 200, 200);
+        _minHeightInput.ForeColor = Color.Black;
+        _minHeightInput.Font = new Font("Bahnschrift", 11);
+        _minHeightInput.BorderStyle = BorderStyle.None;
+        
+        _maxHeightLabel = new Label();
+        _maxHeightLabel.ClientSize = new Size(200, 30);
+        _maxHeightLabel.Location = new Point(50, 460);
+        _maxHeightLabel.BackColor = Color.FromArgb(100, 100, 100);
+        _maxHeightLabel.ForeColor = Color.LightGray;
+        _maxHeightLabel.Text = "Maximum height";
+        _maxHeightLabel.Font = new Font("Bahnschrift", 11);
+        
+        _maxHeightInput = new TextBox();
+        _maxHeightInput.ClientSize = new Size(150, 30);
+        _maxHeightInput.Location = new Point(400, 460);
+        _maxHeightInput.BackColor = Color.FromArgb(200, 200, 200);
+        _maxHeightInput.ForeColor = Color.Black;
+        _maxHeightInput.Font = new Font("Bahnschrift", 11);
+        _maxHeightInput.BorderStyle = BorderStyle.None;
 
         //Apply button
         _applyButton = new Button();
         _applyButton.ClientSize = new Size(90,45);
-        _applyButton.Location = new Point(370, 790);
+        _applyButton.Location = new Point(370, 830);
         _applyButton.BackColor = Color.FromArgb(115, 205, 105);
         _applyButton.ForeColor = Color.White;
         _applyButton.Text = "Apply";
@@ -237,7 +325,7 @@ public class SettingsView : Control
         //Reset button
         _resetButton = new Button();
         _resetButton.ClientSize = new Size(90, 45);
-        _resetButton.Location = new Point(470, 790);
+        _resetButton.Location = new Point(470, 830);
         _resetButton.BackColor = Color.FromArgb(255, 87, 87);
         _resetButton.ForeColor = Color.White;
         _resetButton.Text = "Reset";
@@ -249,6 +337,13 @@ public class SettingsView : Control
         _overflowGraph = new OverflowGraph(this); 
         
         // Add all controls
+        this.Controls.Add(_yearAmountLabel);
+        this.Controls.Add(_yearAmountInput);
+        this.Controls.Add(_minHeightLabel);
+        this.Controls.Add(_minHeightInput);
+        this.Controls.Add(_maxHeightLabel);
+        this.Controls.Add(_maxHeightInput);
+
         this.Controls.Add(_sideBorder);
         this.Controls.Add(_titleBox);
         this.Controls.Add(_simBar);
@@ -290,6 +385,9 @@ public class SettingsView : Control
         this._posChecked = _seaDirection.Checked;
         this._risingSpeed = Double.Parse(_seaRise.Text);
         this._dikeHeight = Double.Parse(_dikeInput.Text);
+        this._amountOfYears = Int32.Parse(_yearAmountInput.Text);
+        this._minHeight = Double.Parse(_minHeightInput.Text);
+        this._maxHeight = Double.Parse(_maxHeightInput.Text);
         this._overflowGraph.Update(this);
     }
 
@@ -300,6 +398,9 @@ public class SettingsView : Control
         this._seaDirection.Checked = true;
         this._seaRise.Text = 2.54.ToString();
         this._dikeInput.Text = 7.ToString();
+        this._yearAmountInput.Text = 100.ToString();
+        this._minHeightInput.Text = 0.ToString();
+        this._maxHeightInput.Text = 10.ToString();
         _ApplyChanges(this, ea);
     }
 }
