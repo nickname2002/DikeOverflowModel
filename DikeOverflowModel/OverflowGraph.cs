@@ -96,9 +96,9 @@ public class OverflowGraph : Panel
             new Point(5, y0 - 20));
 
         gr.DrawString(
-            $"(0, {seaLevel + (speedPerYear * yearAmount)})", 
+            $"({yearAmount}, {seaLevel + (speedPerYear * yearAmount)})", 
             new Font("Bahnschrift", 10), 
             Brushes.Blue, 
-            new Point(WIDTH - 60, yEnd - 20));
+            new Point(WIDTH - 90, yEnd - 20));
     }
 }
