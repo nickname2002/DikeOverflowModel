@@ -5,6 +5,7 @@ namespace DikeOverflowModel;
 public class OverflowGraph : Panel
 {
     private SettingsView _settings;
+    private Point? _intersectionPoint;
     
     // Component data
     private const double WIDTH = 540;
@@ -15,9 +16,35 @@ public class OverflowGraph : Panel
     private Label _yIndicatorLabel;
     private Label _xIndicatorLabel;
 
+    public double YearsUntilOverflow
+    {
+        get
+        {
+            if (this._intersectionPoint.Value.X == -1000)
+            {
+                return -1000;
+            }
+            
+            return this._intersectionPoint.Value.X;
+        }
+    }
+
+    public DateTime OverflowDate
+    {
+        get
+        {
+            DateTime currentDate = Convert.ToDateTime(_settings.Date); 
+            return currentDate.AddDays(this._DaysUntilOverflow());
+        }
+    }
+    
+    // TODO: Either graph calculation or final result calculation is (slightly) wrong
+    // Taking parsing/rounding errors into account
+    
     public OverflowGraph(SettingsView settings)
     {
         this._settings = settings;
+        this._intersectionPoint = new Point(-1000, -1000);
         
         // Component data
         this.ClientSize = new Size((int)WIDTH, (int)HEIGHT);
@@ -70,7 +97,7 @@ public class OverflowGraph : Panel
         double minHeight = _settings.MinHeightGraph;
         double maxHeight = _settings.MaxHeightGraph;
         double factor = (HEIGHT / maxHeight);
-        double expGrowth = 1.0;
+        double expGrowth = 1 + (_settings.GrowthExponent / 100);
         
         // NOTE: This implementation currently only support linear
 
@@ -98,7 +125,7 @@ public class OverflowGraph : Panel
             // Create new points
             newDike = new Point(dikeX, (int)dikeY);
             newWater = new Point(waterX, (int)waterY);
-            
+
             // Draw lines
             gr.DrawLine(Pens.Green, dikePrev, newDike);
             gr.DrawLine(Pens.Blue, waterPrev, newWater);
@@ -139,5 +166,22 @@ public class OverflowGraph : Panel
             new Font("Bahnschrift", 10), 
             Brushes.Blue, 
             new Point((int)WIDTH - 90, (int)waterYEnd - 20));
+    }
+
+    private double _DiffBetweenPoints(Point p1, Point p2)
+    {
+        double xSquared = Math.Pow((p2.X - p1.X), 2);
+        double ySquared = Math.Pow((p2.Y - p1.Y), 2);
+        return Math.Sqrt(xSquared + ySquared);
+    }
+
+    private double _DaysUntilOverflow()
+    {
+        if (this.YearsUntilOverflow == -1000)
+        {
+            return -1000;
+        }
+
+        return this.YearsUntilOverflow * 365;
     }
 }

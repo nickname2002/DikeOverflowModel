@@ -75,10 +75,11 @@ public class LogView : Control
     /// Updates the data in the log view
     /// TODO: Add variables for tracking
     /// </summary>
-    public void UpdateData(double dikeHeight)
+    public void UpdateData(SettingsView settings)
     {
-        this.DikeHeight = dikeHeight;
-        
+        this.DikeHeight = settings.DikeHeight;
+        this.OverflowDate = settings.OverflowDate.ToShortDateString();
+            
         this._logData.Text = "";
         this._logData.Text += $"Water height: {this.WaterHeight}cm\n";
         this._logData.Text += $"Wave reach: {this.WaveReach}\n";

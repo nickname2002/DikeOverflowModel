@@ -7,10 +7,10 @@ namespace DikeOverflowModel;
 
 public class SettingsView : Control
 {
-    private OverflowGraph _overflowGraph;
+    readonly LogView _logView;
+    readonly OverflowGraph _overflowGraph;
     private string _date;
-    private bool _expChecked;
-    private bool _posChecked;
+    private double _expGrowth;
     private double _risingSpeed;
     private double _dikeHeight;
     private int _amountOfYears;
@@ -22,6 +22,14 @@ public class SettingsView : Control
         get
         {
             return this._date;
+        }
+    }
+
+    public double GrowthExponent
+    {
+        get
+        {
+            return this._expGrowth;
         }
     }
 
@@ -65,6 +73,14 @@ public class SettingsView : Control
         }
     }
 
+    public DateTime OverflowDate
+    {
+        get
+        {
+            return this._overflowGraph.OverflowDate;
+        }
+    }
+
     // Component data
     private const int WIDTH = 600;
     private const int HEIGHT = 900;
@@ -87,12 +103,10 @@ public class SettingsView : Control
     //Sea level data
     private Label _seaTitle;
     private Label _seaExp;
-    private Label _seaPos;
     private Label _seaSpeed;
 
     //Sea level fields
-    private CheckBox _seaMode;
-    private CheckBox _seaDirection;
+    private TextBox _seaExpInput;
     private TextBox _seaRise;
 
     //Dike data
@@ -115,8 +129,11 @@ public class SettingsView : Control
     private Button _applyButton;
     private Button _resetButton;
 
-    public SettingsView()
+    public SettingsView(LogView lview)
     {
+        this._logView = lview;
+        
+        // Component properties
         this.BackColor = Color.FromArgb(100, 100, 100);
         this.Location = new Point(1000, 0);
         this.ClientSize = new Size(WIDTH, HEIGHT);
@@ -184,43 +201,35 @@ public class SettingsView : Control
 
         //Sea graph mode title
         _seaExp = new Label();
-        _seaExp.ClientSize = new Size(200, 30);
+        _seaExp.ClientSize = new Size(300, 30);
         _seaExp.Location = new Point(50, 180);
         _seaExp.BackColor = Color.FromArgb(100, 100, 100);
         _seaExp.ForeColor = Color.LightGray;
-        _seaExp.Text = "Exponential";
+        _seaExp.Text = "Speed increase per year (%)";
         _seaExp.Font = new Font("Bahnschrift", 11);
-
-        //Sea level direction title
-        _seaPos = new Label();
-        _seaPos.ClientSize = new Size(200, 30);
-        _seaPos.Location = new Point(50, 210);
-        _seaPos.BackColor = Color.FromArgb(100, 100, 100);
-        _seaPos.ForeColor = Color.LightGray;
-        _seaPos.Text = "Positive";
-        _seaPos.Font = new Font("Bahnschrift", 11);
 
         //Sea level speed title
         _seaSpeed = new Label();
         _seaSpeed.ClientSize = new Size(200, 30);
-        _seaSpeed.Location = new Point(50, 240);
+        _seaSpeed.Location = new Point(50, 210);
         _seaSpeed.BackColor = Color.FromArgb(100, 100, 100);
         _seaSpeed.ForeColor = Color.LightGray;
         _seaSpeed.Text = "Rising speed (cm/decade)";
         _seaSpeed.Font = new Font("Bahnschrift", 11);
 
         //Sea mode checkbox
-        _seaMode = new CheckBox();
-        _seaMode.Location = new Point(535, 180);
-
-        //Sea direction checkbox
-        _seaDirection = new CheckBox();
-        _seaDirection.Location = new Point(535, 210); 
+        _seaExpInput = new TextBox();
+        _seaExpInput.ClientSize = new Size(150, 30);
+        _seaExpInput.Location = new Point(400, 180);
+        _seaExpInput.BackColor = Color.FromArgb(200, 200, 200);
+        _seaExpInput.ForeColor = Color.Black;
+        _seaExpInput.Font = new Font("Bahnschrift", 11);
+        _seaExpInput.BorderStyle = BorderStyle.None;
         
         //Sea level speed input field
         _seaRise = new TextBox();
         _seaRise.ClientSize = new Size(150, 30);
-        _seaRise.Location = new Point(400, 240);
+        _seaRise.Location = new Point(400, 210);
         _seaRise.BackColor = Color.FromArgb(200, 200, 200);
         _seaRise.ForeColor = Color.Black;
         _seaRise.Font = new Font("Bahnschrift", 11);
@@ -355,11 +364,9 @@ public class SettingsView : Control
 
         this.Controls.Add(_seaTitle);
         this.Controls.Add(_seaExp);
-        this.Controls.Add(_seaPos);
         this.Controls.Add(_seaSpeed);
 
-        this.Controls.Add(_seaMode);
-        this.Controls.Add(_seaDirection);
+        this.Controls.Add(_seaExpInput);
         this.Controls.Add(_seaRise);
 
         this.Controls.Add(_dikeTitle);
@@ -381,21 +388,20 @@ public class SettingsView : Control
     private void _ApplyChanges(object? sender, EventArgs ea)
     {
         this._date = _timeSelect.Value.ToShortDateString();
-        this._expChecked = _seaMode.Checked;
-        this._posChecked = _seaDirection.Checked;
+        this._expGrowth = Double.Parse(_seaExpInput.Text);
         this._risingSpeed = Double.Parse(_seaRise.Text);
         this._dikeHeight = Double.Parse(_dikeInput.Text);
         this._amountOfYears = Int32.Parse(_yearAmountInput.Text);
         this._minHeight = Double.Parse(_minHeightInput.Text);
         this._maxHeight = Double.Parse(_maxHeightInput.Text);
         this._overflowGraph.Update(this);
+        this._logView.UpdateData(this);
     }
 
     private void _ResetSettings(object? sender, EventArgs ea)
     {
         this._timeSelect.Value = DateTime.Now;
-        this._seaMode.Checked = false;
-        this._seaDirection.Checked = true;
+        this._seaExpInput.Text = "0.0";
         this._seaRise.Text = 2.54.ToString();
         this._dikeInput.Text = 7.ToString();
         this._yearAmountInput.Text = 100.ToString();

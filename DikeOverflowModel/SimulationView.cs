@@ -23,10 +23,6 @@ public class SimulationView : Control
 
     public SimulationView()
     {
-        // UI components 
-        this._logView = new LogView();
-        this._settingsView = new SettingsView();
-        
         // Component properties
         this.Location = new Point(0, 0);
         this.ClientSize = new Size(1600, 900);
@@ -90,6 +86,10 @@ public class SimulationView : Control
         _pauseButton.TextAlign = ContentAlignment.MiddleCenter;
         _pauseButton.FlatAppearance.BorderColor = Color.FromArgb(0, 0, 255);
         
+        // UI components 
+        this._logView = new LogView();
+        this._settingsView = new SettingsView(_logView);
+
         // Add all controls
         this.Controls.Add(_dateBox);
         this.Controls.Add(_playButton);
@@ -101,6 +101,6 @@ public class SimulationView : Control
         this.Controls.Add(_settingsView);
         this.Controls.Add(_sim);
         
-        this._logView.UpdateData(_settingsView.DikeHeight);
+        this._logView.UpdateData(this._settingsView);
     }
 }
