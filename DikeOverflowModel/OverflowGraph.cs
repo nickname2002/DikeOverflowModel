@@ -7,8 +7,8 @@ public class OverflowGraph : Panel
     private SettingsView _settings;
     
     // Component data
-    private const int WIDTH = 540;
-    private const int HEIGHT = 300;
+    private const double WIDTH = 540;
+    private const double HEIGHT = 300;
 
     // UI components 
     private Label _graphBorder;
@@ -20,7 +20,7 @@ public class OverflowGraph : Panel
         this._settings = settings;
         
         // Component data
-        this.ClientSize = new Size(WIDTH, HEIGHT);
+        this.ClientSize = new Size((int)WIDTH, (int)HEIGHT);
         this.Location = new Point(20, 510);
         this.BackColor = Color.White;
 
@@ -37,7 +37,7 @@ public class OverflowGraph : Panel
         this._xIndicatorLabel = new Label
         {
             ClientSize = new Size(100, 25),
-            Location = new Point(WIDTH - 65, HEIGHT - 25),
+            Location = new Point((int)WIDTH - 65, (int)HEIGHT - 25),
             ForeColor = Color.DarkGray,
             Text = "Time (y)",
             Font = new Font("Bahnschrift", 10)
@@ -70,7 +70,8 @@ public class OverflowGraph : Panel
         double minHeight = _settings.MinHeightGraph;
         double maxHeight = _settings.MaxHeightGraph;
         double factor = (HEIGHT / maxHeight);
-
+        double expGrowth = 1.0;
+        
         // NOTE: This implementation currently only support linear
 
         Point dikePrev = new Point();
@@ -89,14 +90,14 @@ public class OverflowGraph : Panel
             Point newWater;
             
             int dikeX = i;
-            int dikeY = (int)(HEIGHT - (dikeHeight * factor) + (minHeight * factor));
+            double dikeY = HEIGHT - (dikeHeight * factor) + (minHeight * factor);
 
             int waterX = i;
-            int waterY = (int)(HEIGHT - ((seaLevel + (speedPerYear * i * (yearAmount / WIDTH))) * factor) + (minHeight * factor));
+            double waterY = HEIGHT - ((seaLevel + (speedPerYear * Math.Pow(i, expGrowth) * (yearAmount / WIDTH)))) * factor + (minHeight * factor);
 
             // Create new points
-            newDike = new Point(dikeX, dikeY);
-            newWater = new Point(waterX, waterY);
+            newDike = new Point(dikeX, (int)dikeY);
+            newWater = new Point(waterX, (int)waterY);
             
             // Draw lines
             gr.DrawLine(Pens.Green, dikePrev, newDike);
@@ -111,8 +112,8 @@ public class OverflowGraph : Panel
         int dikeYStart = (int)(HEIGHT - (dikeHeight * factor) + (minHeight * factor));
         
         // Sea level
-        int waterYStart = (int)(HEIGHT - (seaLevel * factor) + (minHeight * factor));
-        int waterYEnd = (int)(HEIGHT - (seaLevel + (speedPerYear * yearAmount) * factor) + (minHeight * factor));
+        double waterYStart = (int)(HEIGHT - (seaLevel * factor) + (minHeight * factor));
+        double waterYEnd = HEIGHT - (seaLevel + (speedPerYear * Math.Pow(yearAmount, expGrowth)) * factor) + (minHeight * factor);
         
         // Draw coordinates
         gr.DrawString(
@@ -125,18 +126,18 @@ public class OverflowGraph : Panel
             $"({yearAmount}, {dikeHeight})", 
             new Font("Bahnschrift", 10), 
             Brushes.Green, 
-            new Point(WIDTH - 90, dikeYStart - 20));
+            new Point((int)WIDTH - 90, dikeYStart - 20));
         
         gr.DrawString(
             $"(0, {seaLevel})", 
             new Font("Bahnschrift", 10), 
             Brushes.Blue, 
-            new Point(5, waterYStart - 20));
+            new Point(5, (int)waterYStart - 20));
 
         gr.DrawString(
-            $"({yearAmount}, {seaLevel + (speedPerYear * yearAmount)})", 
+            $"({yearAmount}, {seaLevel + (speedPerYear * Math.Pow(yearAmount, expGrowth))})", 
             new Font("Bahnschrift", 10), 
             Brushes.Blue, 
-            new Point(WIDTH - 90, waterYEnd - 20));
+            new Point((int)WIDTH - 90, (int)waterYEnd - 20));
     }
 }
