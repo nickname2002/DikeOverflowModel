@@ -33,7 +33,7 @@ public class OverflowGraph : Panel
     {
         get
         {
-            DateTime currentDate = Convert.ToDateTime(_settings.Date); 
+            DateTime currentDate = _settings.Date; 
             return currentDate.AddDays(this._DaysUntilOverflow());
         }
     }
@@ -99,18 +99,19 @@ public class OverflowGraph : Panel
         double maxHeight = _settings.MaxHeightGraph;
         double factor = (HEIGHT / maxHeight);
         double expGrowth = 1 + (_settings.GrowthExponent / 100);
+        double yearsFromNow = (_settings.Date - DateTime.Now).Days / 365.0;
         
         // NOTE: This implementation currently only support linear
 
         Point dikePrev = new Point();
         Point waterPrev = new Point();
-        
+
         for (int i = 0; i < WIDTH; i++)
         {
             if (i == 0)
             {
                 dikePrev = new Point(i, (int)(HEIGHT - (dikeHeight * factor) + (minHeight * factor) + (minHeight * factor)));
-                waterPrev = new Point(i, (int)(HEIGHT - (seaLevel * factor) + (minHeight * factor)));
+                waterPrev = new Point(i, (int)(HEIGHT - ((seaLevel + (speedPerYear * (Math.Pow(yearsFromNow + i, expGrowth)) * (yearAmount / WIDTH)))) * factor + (minHeight * factor)));
                 continue;
             }
             
@@ -121,7 +122,7 @@ public class OverflowGraph : Panel
             double dikeY = HEIGHT - (dikeHeight * factor) + (minHeight * factor);
 
             int waterX = i;
-            double waterY = HEIGHT - ((seaLevel + (speedPerYear * Math.Pow(i, expGrowth) * (yearAmount / WIDTH)))) * factor + (minHeight * factor);
+            double waterY = HEIGHT - ((seaLevel + (speedPerYear * (Math.Pow(i, expGrowth) + Math.Pow(yearsFromNow, expGrowth)) * (yearAmount / WIDTH)))) * factor + (minHeight * factor);
 
             // Create new points
             newDike = new Point(dikeX, (int)dikeY);
@@ -140,7 +141,7 @@ public class OverflowGraph : Panel
         int dikeYStart = (int)(HEIGHT - (dikeHeight * factor) + (minHeight * factor));
         
         // Sea level
-        double waterYStart = (int)(HEIGHT - (seaLevel * factor) + (minHeight * factor));
+        double waterYStart = (int)(HEIGHT - (seaLevel + (speedPerYear * Math.Pow(yearsFromNow, expGrowth)) * factor) + (minHeight * factor));
         double waterYEnd = HEIGHT - (seaLevel + (speedPerYear * Math.Pow(yearAmount, expGrowth)) * factor) + (minHeight * factor);
         
         // Draw coordinates
@@ -157,7 +158,7 @@ public class OverflowGraph : Panel
             new Point((int)WIDTH - 90, dikeYStart - 20));
         
         gr.DrawString(
-            $"(0, {seaLevel})", 
+            $"(0, {seaLevel + (speedPerYear * Math.Pow(yearsFromNow, expGrowth))})", 
             new Font("Bahnschrift", 10), 
             Brushes.Blue, 
             new Point(5, (int)waterYStart - 20));

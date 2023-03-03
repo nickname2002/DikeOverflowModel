@@ -9,7 +9,7 @@ public class SettingsView : Control
 {
     readonly LogView _logView;
     readonly OverflowGraph _overflowGraph;
-    private string _date;
+    private DateTime _date;
     private double _expGrowth;
     private double _risingSpeed;
     private double _dikeHeight;
@@ -17,7 +17,7 @@ public class SettingsView : Control
     private double _minHeight;
     private double _maxHeight;
 
-    public string Date
+    public DateTime Date
     {
         get
         {
@@ -387,7 +387,7 @@ public class SettingsView : Control
     
     private void _ApplyChanges(object? sender, EventArgs ea)
     {
-        this._date = _timeSelect.Value.ToShortDateString();
+        this._date = _timeSelect.Value;
         this._expGrowth = Double.Parse(_seaExpInput.Text);
         this._risingSpeed = Double.Parse(_seaRise.Text);
         this._dikeHeight = Double.Parse(_dikeInput.Text);
