@@ -214,7 +214,7 @@ public class SettingsView : Control
         _seaSpeed.Location = new Point(50, 210);
         _seaSpeed.BackColor = Color.FromArgb(100, 100, 100);
         _seaSpeed.ForeColor = Color.LightGray;
-        _seaSpeed.Text = "Rising speed (cm/decade)";
+        _seaSpeed.Text = "Rising speed (cm/year)";
         _seaSpeed.Font = new Font("Bahnschrift", 11);
 
         //Sea mode checkbox
@@ -402,7 +402,7 @@ public class SettingsView : Control
     {
         this._timeSelect.Value = DateTime.Now;
         this._seaExpInput.Text = "0.0";
-        this._seaRise.Text = 2.54.ToString();
+        this._seaRise.Text = 0.34.ToString();
         this._dikeInput.Text = 7.ToString();
         this._yearAmountInput.Text = 100.ToString();
         this._minHeightInput.Text = 0.ToString();
