@@ -6,8 +6,6 @@ public class OverflowGraph : Panel
 {
     private SettingsView _settings;
     public const double SEA_LEVEL = 1.04;
-    public double DRAW_FACTOR;
-    private Point? _intersectionPoint;
     
     // Component data
     private const double WIDTH = 540;
@@ -21,12 +19,7 @@ public class OverflowGraph : Panel
     {
         get
         {
-            if (this._intersectionPoint.Value.X == -1000)
-            {
-                return -1000;
-            }
-            
-            return this._intersectionPoint.Value.X;
+            return 0.0;
         }
     }
 
@@ -41,13 +34,11 @@ public class OverflowGraph : Panel
     
     // TODO: In the graph, take into account the amount the input date for drawing 
     // TODO: Either graph calculation or final result calculation is (slightly) wrong
-    // Taking parsing/rounding errors into account
+    // Take parsing/rounding errors into account
     
     public OverflowGraph(SettingsView settings)
     {
         this._settings = settings;
-        this._intersectionPoint = new Point(-1000, -1000);
-        this.DRAW_FACTOR = (HEIGHT / _settings.MaxHeightGraph);
 
         // Component data
         this.ClientSize = new Size((int)WIDTH, (int)HEIGHT);
@@ -98,19 +89,12 @@ public class OverflowGraph : Panel
         this.DrawCoords(gr);
     }
 
+    /// <summary>
+    /// Draw the contents of the graph
+    /// </summary>
+    /// <param name="gr"></param>
     private void DrawGraphLines(Graphics gr)
     {
-        double dikeHeight = _settings.DikeHeight;
-        double speedPerYear = _settings.RisingSpeed / 100;
-        double yearAmount = _settings.YearAmountGraph;
-        double minHeight = _settings.MinHeightGraph;
-        double maxHeight = _settings.MaxHeightGraph;
-        double factor = (HEIGHT / maxHeight);
-        double expGrowth = 1 + (_settings.GrowthExponent / 100);
-        double yearsFromNow = (_settings.Date - DateTime.Now).Days / 365.0;
-
-        // NOTE: This implementation currently only support linear
-
         Point dikePrev = new Point();
         Point waterPrev = new Point();
 
@@ -118,20 +102,14 @@ public class OverflowGraph : Panel
         {
             if (i == 0)
             {
-                dikePrev = new Point(i, (int)(HEIGHT - (dikeHeight * factor) + (minHeight * factor) + (minHeight * factor)));
-                waterPrev = new Point(i, (int)(HEIGHT - ((SEA_LEVEL + (speedPerYear * (Math.Pow(yearsFromNow + i, expGrowth)) * (yearAmount / WIDTH)))) * factor + (minHeight * factor)));
+                dikePrev = CalcDikeGraphCoords(i);
+                waterPrev = CalcWaterGraphCoords(i);
                 continue;
             }
-
-            int dikeX = i;
-            double dikeY = HEIGHT - (dikeHeight * factor) + (minHeight * factor);
-
-            int waterX = i;
-            double waterY = HEIGHT - ((SEA_LEVEL + (speedPerYear * (Math.Pow(i * (_settings.YearAmountGraph / WIDTH), expGrowth) + Math.Pow(yearsFromNow, expGrowth)) * (yearAmount / WIDTH)))) * factor + (minHeight * factor);
-
+            
             // Create new points
-            Point newWater = new Point(waterX, (int)waterY);
-            Point newDike = new Point(dikeX, (int)dikeY);
+            Point newWater = CalcWaterGraphCoords(i);
+            Point newDike = CalcDikeGraphCoords(i);
 
             // Draw lines
             gr.DrawLine(Pens.Green, dikePrev, newDike);
@@ -143,18 +121,46 @@ public class OverflowGraph : Panel
         }
     }
 
+    /// <summary>
+    /// Calculate the coordinates of the dike graph at a specific
+    /// time.
+    /// </summary>
+    /// <param name="i">Specific point (x) in the graph</param>
+    /// <returns></returns>
+    private Point CalcDikeGraphCoords(int i)
+    {
+        double factor = (HEIGHT / _settings.MaxHeightGraph);
+        
+        // Calculate coordinates
+        int dikeX = i;
+        double dikeY = HEIGHT - (_settings.DikeHeight * factor) + (_settings.MinHeightGraph * factor);
+
+        return new Point(dikeX, (int)dikeY);
+    }
+    
+    /// <summary>
+    /// Calculate the coordinates the sea level graph at a specific
+    /// time.
+    /// </summary>
+    /// <param name="i">Specific point (x) in the graph</param>
+    /// <returns></returns>
     private Point CalcWaterGraphCoords(int i)
     {
+        double maxHeight = _settings.MaxHeightGraph;
+        double factor = (HEIGHT / maxHeight);
         int year = (int)((_settings.YearAmountGraph / WIDTH) * i);
-        int heightFix = (int)(_settings.MinHeightGraph * DRAW_FACTOR);
+        int heightFix = (int)(_settings.MinHeightGraph * factor);
+        
+        // Calculate coordinates
         int waterX = i;
-        int waterY = (int)(HEIGHT - (float)(CalcSeaLevel(year) * DRAW_FACTOR) + heightFix);
-        Console.WriteLine(waterY);
+        int waterY = (int)(HEIGHT - CalcSeaLevel(year) * factor) + heightFix;
+        
         return new Point(waterX, waterY);
     }
-
+    
     /// <summary>
-    /// Draw coordinates in the graph
+    /// Draw coordinates in the graph.
+    /// TODO: Maybe clean the declarations in this method (using helper methods).
     /// </summary>
     private void DrawCoords(Graphics gr)
     {
@@ -193,27 +199,29 @@ public class OverflowGraph : Panel
             new Point((int)WIDTH - 90, (int)waterYEnd - 20));
     }
 
-    // NOTE: For some reason, this causes overflow exception
+    /// <summary>
+    /// Calculate the sea level of a specific year.
+    /// </summary>
+    /// <param name="year">Amount of years since the start of the simulation.</param>
+    /// <returns></returns>
     private double CalcSeaLevel(int year)
     {
         double expGrowth = 1 + (_settings.GrowthExponent / 100);
-        return (SEA_LEVEL + (_settings.RisingSpeed * Math.Pow(year, _settings.GrowthExponent))); 
+        return (SEA_LEVEL + ((_settings.RisingSpeed / 100) * Math.Pow(year, expGrowth))); 
     }
 
-    private double _DiffBetweenPoints(Point p1, Point p2)
+    /// <summary>
+    /// Calculate the intersection point of the water level with the height
+    /// of the dike.
+    /// </summary>
+    /// <returns></returns>
+    private Point CalcIntersectionPoint()
     {
-        double xSquared = Math.Pow((p2.X - p1.X), 2);
-        double ySquared = Math.Pow((p2.Y - p1.Y), 2);
-        return Math.Sqrt(xSquared + ySquared);
+        throw new NotImplementedException();
     }
-
+    
     private double _DaysUntilOverflow()
     {
-        if (this.YearsUntilOverflow == -1000)
-        {
-            return -1000;
-        }
-
-        return this.YearsUntilOverflow * 365;
+        return 0.0;
     }
 }
