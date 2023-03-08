@@ -81,6 +81,14 @@ public class SettingsView : Control
         }
     }
 
+    public double HeightIn50Years
+    {
+        get
+        {
+            return this._overflowGraph.HeightIn50Years;
+        }
+    }
+
     // Component data
     private const int WIDTH = 600;
     private const int HEIGHT = 900;
@@ -210,7 +218,7 @@ public class SettingsView : Control
 
         //Sea level speed title
         _seaSpeed = new Label();
-        _seaSpeed.ClientSize = new Size(200, 30);
+        _seaSpeed.ClientSize = new Size(300, 30);
         _seaSpeed.Location = new Point(50, 210);
         _seaSpeed.BackColor = Color.FromArgb(100, 100, 100);
         _seaSpeed.ForeColor = Color.LightGray;

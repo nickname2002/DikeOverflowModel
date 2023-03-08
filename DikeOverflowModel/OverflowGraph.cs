@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Windows.Forms.VisualStyles;
 
 namespace DikeOverflowModel;
 
@@ -19,7 +20,7 @@ public class OverflowGraph : Panel
     {
         get
         {
-            return 0.0;
+            return this.CalcIntersectionPoint().ToTuple().Item1;
         }
     }
 
@@ -27,8 +28,16 @@ public class OverflowGraph : Panel
     {
         get
         {
-            DateTime currentDate = _settings.Date; 
-            return currentDate.AddDays(this._DaysUntilOverflow());
+            double time = this.CalcIntersectionPoint().ToTuple().Item1;
+            return DateTime.Now.AddDays(time * 365);
+        }
+    }
+
+    public double HeightIn50Years
+    {
+        get
+        {
+            return this.CalcSeaLevel(50);
         }
     }
     
@@ -87,10 +96,11 @@ public class OverflowGraph : Panel
         Graphics gr = ea.Graphics;
         this.DrawGraphLines(gr);
         this.DrawCoords(gr);
+        this.DrawIntersectionPoint(gr);
     }
 
     /// <summary>
-    /// Draw the contents of the graph
+    /// Draw the contents of the graph.
     /// </summary>
     /// <param name="gr"></param>
     private void DrawGraphLines(Graphics gr)
@@ -121,6 +131,19 @@ public class OverflowGraph : Panel
         }
     }
 
+    /// <summary>
+    /// Draw the intersection point of the sea level and dike height
+    /// in the graph.
+    /// </summary>
+    /// <param name="gr"></param>
+    public void DrawIntersectionPoint(Graphics gr)
+    {
+        (double t, double h) = CalcIntersectionPoint();
+        int i = (int)(t / (_settings.YearAmountGraph / WIDTH));
+        Point drawPoint = this.CalcWaterGraphCoords(i);        
+        gr.FillRectangle(Brushes.DarkRed, drawPoint.X - 2, drawPoint.Y - 2, 5, 5);
+    }
+    
     /// <summary>
     /// Calculate the coordinates of the dike graph at a specific
     /// time.
@@ -173,7 +196,7 @@ public class OverflowGraph : Panel
         double waterYStart = (int)(HEIGHT - (SEA_LEVEL + (speedPerYear * Math.Pow(yearsFromNow, expGrowth)) * factor) + (_settings.MinHeightGraph * factor));
         double waterYEnd = HEIGHT - (SEA_LEVEL + (speedPerYear * Math.Pow(yearAmount, expGrowth)) * factor) + (_settings.MinHeightGraph * factor);
 
-        // Draw coordinates
+        // Dike height
         gr.DrawString(
             $"(0, {_settings.DikeHeight})",
             new Font("Bahnschrift", 10),
@@ -186,6 +209,7 @@ public class OverflowGraph : Panel
             Brushes.Green,
             new Point((int)WIDTH - 90, dikeYStart - 20));
 
+        // Sea level
         gr.DrawString(
             $"(0, {SEA_LEVEL + (speedPerYear * Math.Pow(yearsFromNow, expGrowth))})",
             new Font("Bahnschrift", 10),
@@ -197,6 +221,17 @@ public class OverflowGraph : Panel
             new Font("Bahnschrift", 10),
             Brushes.Blue,
             new Point((int)WIDTH - 90, (int)waterYEnd - 20));
+        
+        // Intersection point
+        (double t, double h) = CalcIntersectionPoint();
+        int i = (int)(t / (_settings.YearAmountGraph / WIDTH));
+        Point drawPoint = this.CalcWaterGraphCoords(i);
+
+        gr.DrawString(
+            $"({Math.Round(t, 2)}, {Math.Round(h, 2)})",
+            new Font("Bahnschrift", 10),
+            Brushes.DarkRed,
+            new Point(drawPoint.X, drawPoint.Y + 20));
     }
 
     /// <summary>
@@ -210,18 +245,21 @@ public class OverflowGraph : Panel
         return (SEA_LEVEL + ((_settings.RisingSpeed / 100) * Math.Pow(year, expGrowth))); 
     }
 
+    private double NthRoot(double v, double power)
+    {
+        return Math.Pow(v, 1.0 / power);
+    }
+    
     /// <summary>
     /// Calculate the intersection point of the water level with the height
     /// of the dike.
     /// </summary>
     /// <returns></returns>
-    private Point CalcIntersectionPoint()
+    private (double time, double height) CalcIntersectionPoint()
     {
-        throw new NotImplementedException();
-    }
-    
-    private double _DaysUntilOverflow()
-    {
-        return 0.0;
+        double v = (_settings.DikeHeight - SEA_LEVEL) / (_settings.RisingSpeed / 100);
+        double t = NthRoot(v, 1 + (_settings.GrowthExponent / 100));
+        double h = CalcSeaLevel((int)t);
+        return (t, h);
     }
 }

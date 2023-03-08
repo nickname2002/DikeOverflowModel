@@ -79,11 +79,12 @@ public class LogView : Control
     {
         this.DikeHeight = settings.DikeHeight;
         this.OverflowDate = settings.OverflowDate.ToShortDateString();
+        this.HeightIn50Years = settings.HeightIn50Years;
             
         this._logData.Text = "";
         this._logData.Text += $"Water height: {this.WaterHeight}cm\n";
         this._logData.Text += $"Wave reach: {this.WaveReach}\n";
-        this._logData.Text += $"Height in 50 years: {this.HeightIn50Years}\n";
+        this._logData.Text += $"Height in 50 years: {this.HeightIn50Years}m\n";
         this._logData.Text += $"Overflow date: {this.OverflowDate}\n";
         this._logData.Text += $"Dike height: {this.DikeHeight}\n";
     }
