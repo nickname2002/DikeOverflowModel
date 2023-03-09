@@ -55,6 +55,10 @@ public class SettingsView : Control
         {
             return this._amountOfYears;
         }
+        set
+        {
+            this._amountOfYears = value;
+        }
     }
 
     public double MinHeightGraph
@@ -132,10 +136,11 @@ public class SettingsView : Control
     private TextBox _minHeightInput;
     private Label _maxHeightLabel;
     private TextBox _maxHeightInput;
-    
+
     //Buttons
     private Button _applyButton;
     private Button _resetButton;
+    private Button _focusIntersectionButton;
 
     public SettingsView(LogView lview)
     {
@@ -246,7 +251,7 @@ public class SettingsView : Control
         //Dike title
         _dikeTitle = new Label();
         _dikeTitle.ClientSize = new Size(200, 30);
-        _dikeTitle.Location = new Point(10, 290);
+        _dikeTitle.Location = new Point(10, 250);
         _dikeTitle.BackColor = Color.FromArgb(100, 100, 100);
         _dikeTitle.ForeColor = Color.White;
         _dikeTitle.Text = "Dike";
@@ -255,7 +260,7 @@ public class SettingsView : Control
         //Dike height title
         _dikeHeightBox = new Label();
         _dikeHeightBox.ClientSize = new Size(200, 30);
-        _dikeHeightBox.Location = new Point(50, 320);
+        _dikeHeightBox.Location = new Point(50, 280);
         _dikeHeightBox.BackColor = Color.FromArgb(100, 100, 100);
         _dikeHeightBox.ForeColor = Color.LightGray;
         _dikeHeightBox.Text = "Height (m)";
@@ -264,7 +269,7 @@ public class SettingsView : Control
         //Sea level speed input field
         _dikeInput = new TextBox();
         _dikeInput.ClientSize = new Size(150, 30);
-        _dikeInput.Location = new Point(400, 320);
+        _dikeInput.Location = new Point(400, 280);
         _dikeInput.BackColor = Color.FromArgb(200, 200, 200);
         _dikeInput.ForeColor = Color.Black;
         _dikeInput.Font = new Font("Bahnschrift", 11);
@@ -273,7 +278,7 @@ public class SettingsView : Control
         //Graph title
         _graphTitle = new Label();
         _graphTitle.ClientSize = new Size(200, 30);
-        _graphTitle.Location = new Point(10, 370);
+        _graphTitle.Location = new Point(10, 330);
         _graphTitle.BackColor = Color.FromArgb(100, 100, 100);
         _graphTitle.ForeColor = Color.White;
         _graphTitle.Text = "Overflow graph";
@@ -282,7 +287,7 @@ public class SettingsView : Control
         // Graph data
         _yearAmountLabel = new Label();
         _yearAmountLabel.ClientSize = new Size(200, 30);
-        _yearAmountLabel.Location = new Point(50, 400);
+        _yearAmountLabel.Location = new Point(50, 360);
         _yearAmountLabel.BackColor = Color.FromArgb(100, 100, 100);
         _yearAmountLabel.ForeColor = Color.LightGray;
         _yearAmountLabel.Text = "Amount of years";
@@ -290,7 +295,7 @@ public class SettingsView : Control
 
         _yearAmountInput = new TextBox();
         _yearAmountInput.ClientSize = new Size(150, 30);
-        _yearAmountInput.Location = new Point(400, 400);
+        _yearAmountInput.Location = new Point(400, 360);
         _yearAmountInput.BackColor = Color.FromArgb(200, 200, 200);
         _yearAmountInput.ForeColor = Color.Black;
         _yearAmountInput.Font = new Font("Bahnschrift", 11);
@@ -298,7 +303,7 @@ public class SettingsView : Control
 
         _minHeightLabel = new Label();
         _minHeightLabel.ClientSize = new Size(200, 30);
-        _minHeightLabel.Location = new Point(50, 430);
+        _minHeightLabel.Location = new Point(50, 390);
         _minHeightLabel.BackColor = Color.FromArgb(100, 100, 100);
         _minHeightLabel.ForeColor = Color.LightGray;
         _minHeightLabel.Text = "Minimum height";
@@ -306,7 +311,7 @@ public class SettingsView : Control
         
         _minHeightInput = new TextBox();
         _minHeightInput.ClientSize = new Size(150, 30);
-        _minHeightInput.Location = new Point(400, 430);
+        _minHeightInput.Location = new Point(400, 390);
         _minHeightInput.BackColor = Color.FromArgb(200, 200, 200);
         _minHeightInput.ForeColor = Color.Black;
         _minHeightInput.Font = new Font("Bahnschrift", 11);
@@ -314,7 +319,7 @@ public class SettingsView : Control
         
         _maxHeightLabel = new Label();
         _maxHeightLabel.ClientSize = new Size(200, 30);
-        _maxHeightLabel.Location = new Point(50, 460);
+        _maxHeightLabel.Location = new Point(50, 420);
         _maxHeightLabel.BackColor = Color.FromArgb(100, 100, 100);
         _maxHeightLabel.ForeColor = Color.LightGray;
         _maxHeightLabel.Text = "Maximum height";
@@ -322,7 +327,7 @@ public class SettingsView : Control
         
         _maxHeightInput = new TextBox();
         _maxHeightInput.ClientSize = new Size(150, 30);
-        _maxHeightInput.Location = new Point(400, 460);
+        _maxHeightInput.Location = new Point(400, 420);
         _maxHeightInput.BackColor = Color.FromArgb(200, 200, 200);
         _maxHeightInput.ForeColor = Color.Black;
         _maxHeightInput.Font = new Font("Bahnschrift", 11);
@@ -349,6 +354,17 @@ public class SettingsView : Control
         _resetButton.Font = new Font("Bahnschrift", 10);
         _resetButton.FlatStyle = FlatStyle.Flat;
         _resetButton.FlatAppearance.BorderColor = Color.FromArgb(255, 87, 87);
+        
+        // Focus intersection point
+        _focusIntersectionButton = new Button();
+        _focusIntersectionButton.ClientSize = new Size(90, 45);
+        _focusIntersectionButton.Location = new Point(270, 830);
+        _focusIntersectionButton.BackColor = Color.FromArgb(0,0,205);
+        _focusIntersectionButton.ForeColor = Color.White;
+        _focusIntersectionButton.Text = "Focus";
+        _focusIntersectionButton.Font = new Font("Bahnschrift", 10);
+        _focusIntersectionButton.FlatStyle = FlatStyle.Flat;
+        _focusIntersectionButton.FlatAppearance.BorderColor = Color.FromArgb(30,144,255);
 
         //Overflow graph 
         _overflowGraph = new OverflowGraph(this); 
@@ -386,10 +402,12 @@ public class SettingsView : Control
 
         this.Controls.Add(_applyButton);
         this.Controls.Add(_resetButton); 
+        this.Controls.Add(_focusIntersectionButton);
         
         // Events
         this._applyButton.Click += _ApplyChanges;
         this._resetButton.Click += _ResetSettings;
+        this._focusIntersectionButton.Click += FocusIntersectionButton;
         this._ResetSettings(null, null);
     }
     
@@ -416,5 +434,16 @@ public class SettingsView : Control
         this._minHeightInput.Text = 0.ToString();
         this._maxHeightInput.Text = 10.ToString();
         _ApplyChanges(this, ea);
+    }
+
+    /// <summary>
+    /// Set the year amount in the graph to make
+    /// sure the intersection point is in view.
+    /// </summary>
+    private void FocusIntersectionButton(object? sender, EventArgs ea)
+    {
+        (double t, double h) = _overflowGraph.CalcIntersectionPoint();
+        this._yearAmountInput.Text = ((int)(t * 2)).ToString();
+        this._ApplyChanges(this, null);
     }
 }

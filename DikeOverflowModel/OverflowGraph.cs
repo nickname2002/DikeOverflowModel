@@ -255,7 +255,7 @@ public class OverflowGraph : Panel
     /// of the dike.
     /// </summary>
     /// <returns></returns>
-    private (double time, double height) CalcIntersectionPoint()
+    public (double time, double height) CalcIntersectionPoint()
     {
         double v = (_settings.DikeHeight - SEA_LEVEL) / (_settings.RisingSpeed / 100);
         double t = NthRoot(v, 1 + (_settings.GrowthExponent / 100));
