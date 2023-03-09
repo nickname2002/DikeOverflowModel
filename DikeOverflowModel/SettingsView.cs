@@ -444,6 +444,7 @@ public class SettingsView : Control
     {
         (double t, double h) = _overflowGraph.CalcIntersectionPoint();
         this._yearAmountInput.Text = ((int)(t * 2)).ToString();
+        this._minHeightInput.Text = (Math.Round(h, 2) - (MaxHeightGraph / 2)).ToString();
         this._ApplyChanges(this, null);
     }
 }
