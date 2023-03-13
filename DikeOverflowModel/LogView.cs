@@ -73,7 +73,6 @@ public class LogView : Control
 
     /// <summary>
     /// Updates the data in the log view
-    /// TODO: Add variables for tracking
     /// </summary>
     public void UpdateData(SettingsView settings)
     {

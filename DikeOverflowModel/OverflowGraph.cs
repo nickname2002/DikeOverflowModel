@@ -41,10 +41,6 @@ public class OverflowGraph : Panel
         }
     }
     
-    // TODO: In the graph, take into account the amount the input date for drawing 
-    // TODO: Either graph calculation or final result calculation is (slightly) wrong
-    // Take parsing/rounding errors into account
-    
     public OverflowGraph(SettingsView settings)
     {
         this._settings = settings;
@@ -183,7 +179,6 @@ public class OverflowGraph : Panel
     
     /// <summary>
     /// Draw coordinates in the graph.
-    /// TODO: Maybe clean the declarations in this method (using helper methods).
     /// </summary>
     private void DrawCoords(Graphics gr)
     {
