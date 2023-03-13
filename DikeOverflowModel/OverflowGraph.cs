@@ -6,7 +6,7 @@ namespace DikeOverflowModel;
 public class OverflowGraph : Panel
 {
     private SettingsView _settings;
-    public const double SEA_LEVEL = 1.04;
+    public const double SEA_LEVEL = 0.0;
     
     // Component data
     private const double WIDTH = 540;

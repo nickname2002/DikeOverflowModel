@@ -26,7 +26,7 @@ public class LogView : Control
     public LogView()
     {
         // Property initialization
-        this.WaterHeight = 104;
+        this.WaterHeight = 0;
         this.WaveReach = 0;
         this.HeightIn50Years = 0;
         this.OverflowDate = null;
@@ -82,9 +82,9 @@ public class LogView : Control
         this.HeightIn50Years = settings.HeightIn50Years;
             
         this._logData.Text = "";
-        this._logData.Text += $"Water height: {this.WaterHeight}cm\n";
-        this._logData.Text += $"Wave reach: {this.WaveReach}\n";
-        this._logData.Text += $"Height in 50 years: {this.HeightIn50Years}m\n";
+        this._logData.Text += $"Starting sea height (NAP): {this.WaterHeight}cm\n";
+        // this._logData.Text += $"Wave reach: {this.WaveReach}\n";
+        this._logData.Text += $"Height in 50 years: {Math.Round(this.HeightIn50Years, 3)}m\n";
         this._logData.Text += $"Overflow date: {this.OverflowDate}\n";
         this._logData.Text += $"Dike height: {this.DikeHeight}\n";
     }

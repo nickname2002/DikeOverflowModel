@@ -263,7 +263,7 @@ public class SettingsView : Control
         _dikeHeightBox.Location = new Point(50, 280);
         _dikeHeightBox.BackColor = Color.FromArgb(100, 100, 100);
         _dikeHeightBox.ForeColor = Color.LightGray;
-        _dikeHeightBox.Text = "Height (m)";
+        _dikeHeightBox.Text = "Height from NAP (m)";
         _dikeHeightBox.Font = new Font("Bahnschrift", 11);
 
         //Sea level speed input field
@@ -409,6 +409,7 @@ public class SettingsView : Control
         this._resetButton.Click += _ResetSettings;
         this._focusIntersectionButton.Click += FocusIntersectionButton;
         this._ResetSettings(null, null);
+        this.FocusIntersectionButton(null, null);
     }
     
     private void _ApplyChanges(object? sender, EventArgs ea)
@@ -424,12 +425,13 @@ public class SettingsView : Control
         this._logView.UpdateData(this);
     }
 
+    /* NOTE: can be used for starting values. */
     private void _ResetSettings(object? sender, EventArgs ea)
     {
         this._timeSelect.Value = DateTime.Now;
         this._seaExpInput.Text = "0.0";
         this._seaRise.Text = 0.34.ToString();
-        this._dikeInput.Text = 7.ToString();
+        this._dikeInput.Text = 1.ToString();
         this._yearAmountInput.Text = 100.ToString();
         this._minHeightInput.Text = 0.ToString();
         this._maxHeightInput.Text = 10.ToString();
