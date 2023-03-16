@@ -7,8 +7,9 @@ public class SimulationView : Control, IObservable
     private LogView _logView;
     private SimulationRenderer _simulationRenderer;
 
-    // Simulation thread
+    // Simulation parameters
     Thread _simThread;
+    private bool _isPlaying;
 
     // Component data
     private const int SIMULATION_WIDTH = 1000;
@@ -129,7 +130,7 @@ public class SimulationView : Control, IObservable
 
     public void ProgressSim()
     {
-        while (this._simThread != null) // TODO: Also stop when overflow
+        while (this._simThread != null && !_settingsView.HasOverflown())
         {
             this._settingsView.Date = this._settingsView.Date.AddYears(_settingsView.Interval);
             this._simulationRenderer.Invalidate();

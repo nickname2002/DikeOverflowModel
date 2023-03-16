@@ -530,4 +530,9 @@ public class SettingsView : Control, IObserver
     {
         this._subscribers.Add(subscriber);
     }
+
+    public bool HasOverflown()
+    {
+        return this.OverflowDate.Year < this.Date.Year;
+    }
 }
