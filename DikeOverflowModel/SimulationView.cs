@@ -7,6 +7,9 @@ public class SimulationView : Control, IObservable
     private LogView _logView;
     private SimulationRenderer _simulationRenderer;
 
+    // Simulation thread
+    Thread _simThread;
+
     // Component data
     private const int SIMULATION_WIDTH = 1000;
     private const int SIMULATION_HEIGHT = 592;
@@ -97,12 +100,52 @@ public class SimulationView : Control, IObservable
         this.Controls.Add(_settingsView);
         this.Controls.Add(_simulationRenderer);
 
+        // Event handlers
+        this._playButton.Click += PlaySim;
+        this._pauseButton.Click += StopSim;
+
         // Update engine components 
         this._settingsView.Notify();
     }
 
     public void Update(SettingsView s)
     {
-        this._dateBox.Text = s.Date.ToShortDateString();
+        try
+        {
+            this._dateBox.Text = s.Date.ToShortDateString();
+        }
+        catch (Exception ex)
+        {
+            
+        }
+    }
+
+    public void PlaySim(object sender, EventArgs ea)
+    {
+        this._settingsView.ApplyChanges(null, null);
+        this._simThread = new Thread(ProgressSim);
+        this._simThread.Start();
+    }
+
+    public void ProgressSim()
+    {
+        while (this._simThread != null) // TODO: Also stop when overflow
+        {
+            this._settingsView.Date = this._settingsView.Date.AddYears(_settingsView.Interval);
+            this._simulationRenderer.Invalidate();
+
+            // Update date in UI
+            this._dateBox.Invoke((MethodInvoker)delegate {
+                this._dateBox.Text = _settingsView.Date.ToShortDateString();
+            });
+
+            this._settingsView.Notify();
+            Thread.Sleep(500);
+        }
+    }
+
+    public void StopSim(object sender, EventArgs ea)
+    {
+        this._simThread = null;
     }
 }
