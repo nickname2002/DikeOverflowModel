@@ -61,20 +61,11 @@ namespace DikeOverflowModel.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string app_icon {
-            get {
-                return ResourceManager.GetString("app_icon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon dikesim_icon {
+        internal static System.Drawing.Icon overflow_sim_icon {
             get {
-                object obj = ResourceManager.GetObject("dikesim_icon", resourceCulture);
+                object obj = ResourceManager.GetObject("overflow_sim_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
