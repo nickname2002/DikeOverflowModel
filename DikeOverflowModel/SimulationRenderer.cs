@@ -45,6 +45,7 @@ namespace DikeOverflowModel
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             this.DrawDike(g);
             this.DrawWater(g);
+            this.DrawInfo(g);
         }
 
         private void ScrollEvent(object sender, MouseEventArgs ea)
@@ -77,7 +78,19 @@ namespace DikeOverflowModel
 
         private void DrawInfo(Graphics g)
         {
-            throw new NotImplementedException();
+            // Water height
+            g.DrawString(
+                $"{Math.Round(this._waterHeight, 2)}m", 
+                new Font("Bahnschrift", 12), 
+                Brushes.DarkBlue, 
+                new Point(350, (int)(this.Height - _waterHeight * _scale + 20)));
+
+            // Dike height
+            g.DrawString(
+                $"{Math.Round(this._dikeHeight, 2)}m", 
+                new Font("Bahnschrift", 12), 
+                Brushes.Black, 
+                new Point((int)(700 + _scale / 3), (int)(this.Height - _dikeHeight * _scale) + 20));
         }
     }
 }
