@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms.VisualStyles;
 
 namespace DikeOverflowModel;
 
-public class OverflowGraph : Panel
+public class OverflowGraph : Panel, IObservable
 {
     private SettingsView _settings;
     public const double SEA_LEVEL = 0.0;
@@ -44,6 +45,7 @@ public class OverflowGraph : Panel
     public OverflowGraph(SettingsView settings)
     {
         this._settings = settings;
+        this.BackgroundImage = Properties.Resources.grid_backdrop_graph;
 
         // Component data
         this.ClientSize = new Size((int)WIDTH, (int)HEIGHT);
@@ -90,6 +92,7 @@ public class OverflowGraph : Panel
     private void PaintEvent(object? sender, PaintEventArgs ea)
     {
         Graphics gr = ea.Graphics;
+        gr.SmoothingMode = SmoothingMode.AntiAlias;
         this.DrawGraphLines(gr);
         this.DrawCoords(gr);
         this.DrawIntersectionPoint(gr);
@@ -186,9 +189,8 @@ public class OverflowGraph : Panel
         double yearAmount = _settings.YearAmountGraph;
         double factor = (HEIGHT / _settings.MaxHeightGraph);
         double expGrowth = 1 + (_settings.GrowthExponent / 100);
-        double yearsFromNow = (_settings.Date - DateTime.Now).Days / 365.0;
         int dikeYStart = (int)(HEIGHT - (_settings.DikeHeight * factor) + (_settings.MinHeightGraph * factor));
-        double waterYStart = (int)(HEIGHT - (SEA_LEVEL + (speedPerYear * Math.Pow(yearsFromNow, expGrowth)) * factor) + (_settings.MinHeightGraph * factor));
+        double waterYStart = (int)(HEIGHT - (SEA_LEVEL + (speedPerYear * Math.Pow(0, expGrowth)) * factor) + (_settings.MinHeightGraph * factor));
         double waterYEnd = HEIGHT - (SEA_LEVEL + (speedPerYear * Math.Pow(yearAmount, expGrowth)) * factor) + (_settings.MinHeightGraph * factor);
 
         // Dike height
@@ -206,13 +208,13 @@ public class OverflowGraph : Panel
 
         // Sea level
         gr.DrawString(
-            $"(0, {SEA_LEVEL + (speedPerYear * Math.Pow(yearsFromNow, expGrowth))})",
+            $"(0, {Math.Round(SEA_LEVEL + (speedPerYear * Math.Pow(0, expGrowth)), 2)})",
             new Font("Bahnschrift", 10),
             Brushes.Blue,
             new Point(5, (int)waterYStart - 20));
 
         gr.DrawString(
-            $"({yearAmount}, {SEA_LEVEL + (speedPerYear * Math.Pow(yearAmount, expGrowth))})",
+            $"({yearAmount}, {Math.Round(SEA_LEVEL + (speedPerYear * Math.Pow(yearAmount, expGrowth)), 2)})",
             new Font("Bahnschrift", 10),
             Brushes.Blue,
             new Point((int)WIDTH - 90, (int)waterYEnd - 20));
@@ -234,7 +236,7 @@ public class OverflowGraph : Panel
     /// </summary>
     /// <param name="year">Amount of years since the start of the simulation.</param>
     /// <returns></returns>
-    private double CalcSeaLevel(int year)
+    public double CalcSeaLevel(int year)
     {
         double expGrowth = 1 + (_settings.GrowthExponent / 100);
         return (SEA_LEVEL + ((_settings.RisingSpeed / 100) * Math.Pow(year, expGrowth))); 

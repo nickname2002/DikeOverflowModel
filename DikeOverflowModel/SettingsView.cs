@@ -5,9 +5,10 @@ using System.Windows.Forms.VisualStyles;
 
 namespace DikeOverflowModel;
 
-public class SettingsView : Control
+public class SettingsView : Control, IObserver
 {
-    readonly LogView _logView;
+    private List<IObservable> _subscribers;
+
     readonly OverflowGraph _overflowGraph;
     private DateTime _date;
     private double _expGrowth;
@@ -16,6 +17,15 @@ public class SettingsView : Control
     private int _amountOfYears;
     private double _minHeight;
     private double _maxHeight;
+
+    public double SeaLevel
+    {
+        get
+        {
+            double time = (Date - DateTime.Now).TotalDays / 365;
+            return this._overflowGraph.CalcSeaLevel((int)time);
+        }
+    }
 
     public DateTime Date
     {
@@ -93,6 +103,14 @@ public class SettingsView : Control
         }
     }
 
+    public List<IObservable> Subscribers
+    {
+        get
+        {
+            return this._subscribers;
+        }
+    }
+
     // Component data
     private const int WIDTH = 600;
     private const int HEIGHT = 900;
@@ -142,10 +160,16 @@ public class SettingsView : Control
     private Button _resetButton;
     private Button _focusIntersectionButton;
 
-    public SettingsView(LogView lview)
+    public SettingsView(LogView lview, SimulationRenderer sim)
     {
-        this._logView = lview;
-        
+        _overflowGraph = new OverflowGraph(this);
+
+        // Subscribe observables to observer
+        this._subscribers = new List<IObservable>();
+        this.Subscribe(lview);
+        this.Subscribe(sim);
+        this.Subscribe(_overflowGraph);
+
         // Component properties
         this.BackColor = Color.FromArgb(100, 100, 100);
         this.Location = new Point(1000, 0);
@@ -365,9 +389,6 @@ public class SettingsView : Control
         _focusIntersectionButton.Font = new Font("Bahnschrift", 10);
         _focusIntersectionButton.FlatStyle = FlatStyle.Flat;
         _focusIntersectionButton.FlatAppearance.BorderColor = Color.FromArgb(30,144,255);
-
-        //Overflow graph 
-        _overflowGraph = new OverflowGraph(this); 
         
         // Add all controls
         this.Controls.Add(_yearAmountLabel);
@@ -421,8 +442,7 @@ public class SettingsView : Control
         this._amountOfYears = Int32.Parse(_yearAmountInput.Text);
         this._minHeight = Double.Parse(_minHeightInput.Text);
         this._maxHeight = Double.Parse(_maxHeightInput.Text);
-        this._overflowGraph.Update(this);
-        this._logView.UpdateData(this);
+        this.Notify();
     }
 
     /* NOTE: can be used for starting values. */
@@ -448,5 +468,26 @@ public class SettingsView : Control
         this._yearAmountInput.Text = ((int)(t * 2)).ToString();
         this._minHeightInput.Text = (Math.Round(h, 2) - (MaxHeightGraph / 2)).ToString();
         this._ApplyChanges(this, null);
+    }
+
+    /// <summary>
+    /// Update subscriber observer.
+    /// </summary>
+    /// <param name="s"></param>
+    public void Notify()
+    {
+        foreach (var subscriber in _subscribers)
+        {
+            subscriber.Update(this);
+        }
+    }
+
+    /// <summary>
+    /// Add subscriber to observer.
+    /// </summary>
+    /// <param name="subscriber"></param>
+    public void Subscribe(IObservable subscriber)
+    {
+        this._subscribers.Add(subscriber);
     }
 }

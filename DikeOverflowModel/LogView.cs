@@ -2,7 +2,7 @@
 
 namespace DikeOverflowModel;
 
-public class LogView : Control
+public class LogView : Control, IObservable
 {
     // Component data
     private const int WIDTH = 1000;
@@ -74,7 +74,7 @@ public class LogView : Control
     /// <summary>
     /// Updates the data in the log view
     /// </summary>
-    public void UpdateData(SettingsView settings)
+    public void Update(SettingsView settings)
     {
         this.DikeHeight = settings.DikeHeight;
         this.OverflowDate = settings.OverflowDate.ToShortDateString();

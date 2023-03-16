@@ -5,6 +5,7 @@ public class SimulationView : Control
     // Simulation components
     private SettingsView _settingsView;
     private LogView _logView;
+    private SimulationRenderer _simulationRenderer;
 
     // Component data
     private const int SIMULATION_WIDTH = 1000;
@@ -17,9 +18,6 @@ public class SimulationView : Control
     private Label _dateBox;
     private Button _playButton;
     private Button _pauseButton;
-    
-    // Simulation panel
-    private Panel _sim;
 
     public SimulationView()
     {
@@ -51,17 +49,15 @@ public class SimulationView : Control
         _dateBox = new Label();
         _dateBox.ClientSize = new Size(100, 25);
         _dateBox.Location = new Point(0, 60);
-        _dateBox.ForeColor = Color.White;
-        _dateBox.BackColor = Color.Black;
+        _dateBox.ForeColor = Color.Gray;
+        _dateBox.BackColor = Color.White;
         _dateBox.TextAlign = ContentAlignment.MiddleCenter;
         _dateBox.Text = DateTime.Now.ToShortDateString();
         _dateBox.Font = new Font("Bahnschrift", 12);
 
         // Simulation panel
-        this._sim = new Panel();
-        this._sim.ClientSize = new Size(SIMULATION_WIDTH, SIMULATION_HEIGHT);
-        this._sim.Location = new Point(0, 8);
-        this._sim.BackColor = Color.Black; // NOTE: Backcolor needs to be changed (maybe rect grid?)
+        this._simulationRenderer = new SimulationRenderer();
+        this._simulationRenderer.Location = new Point(0, 8);
         
         // Play button
         _playButton = new Button();
@@ -88,7 +84,7 @@ public class SimulationView : Control
         
         // UI components 
         this._logView = new LogView();
-        this._settingsView = new SettingsView(_logView);
+        this._settingsView = new SettingsView(_logView, _simulationRenderer);
 
         // Add all controls
         this.Controls.Add(_dateBox);
@@ -99,8 +95,9 @@ public class SimulationView : Control
         this.Controls.Add(_simBarBorder);
         this.Controls.Add(_logView);
         this.Controls.Add(_settingsView);
-        this.Controls.Add(_sim);
-        
-        this._logView.UpdateData(this._settingsView);
+        this.Controls.Add(_simulationRenderer);
+
+        // Update engine components 
+        this._settingsView.Notify();
     }
 }
