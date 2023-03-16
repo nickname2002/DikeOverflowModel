@@ -1,6 +1,6 @@
 ﻿namespace DikeOverflowModel;
 
-public class SimulationView : Control
+public class SimulationView : Control, IObservable
 {
     // Simulation components
     private SettingsView _settingsView;
@@ -84,7 +84,7 @@ public class SimulationView : Control
         
         // UI components 
         this._logView = new LogView();
-        this._settingsView = new SettingsView(_logView, _simulationRenderer);
+        this._settingsView = new SettingsView(this, _logView, _simulationRenderer);
 
         // Add all controls
         this.Controls.Add(_dateBox);
@@ -99,5 +99,10 @@ public class SimulationView : Control
 
         // Update engine components 
         this._settingsView.Notify();
+    }
+
+    public void Update(SettingsView s)
+    {
+        this._dateBox.Text = s.Date.ToShortDateString();
     }
 }

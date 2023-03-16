@@ -124,8 +124,6 @@ public class SettingsView : Control, IObserver
     //Time data
     private Label _timeTitle;
     private Label _timeLabel;
-    private Label _timeMonth;
-    private Label _timeYear;
 
     //Time input fields
     private DateTimePicker _timeSelect;    
@@ -160,15 +158,16 @@ public class SettingsView : Control, IObserver
     private Button _resetButton;
     private Button _focusIntersectionButton;
 
-    public SettingsView(LogView lview, SimulationRenderer sim)
+    public SettingsView(SimulationView sView, LogView lView, SimulationRenderer sim)
     {
         _overflowGraph = new OverflowGraph(this);
 
         // Subscribe observables to observer
         this._subscribers = new List<IObservable>();
-        this.Subscribe(lview);
+        this.Subscribe(lView);
         this.Subscribe(sim);
         this.Subscribe(_overflowGraph);
+        this.Subscribe(sView);
 
         // Component properties
         this.BackColor = Color.FromArgb(100, 100, 100);
