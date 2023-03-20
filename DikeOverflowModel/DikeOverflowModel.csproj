@@ -6,12 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>overflow_sim_icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\overflow_sim_icon.ico</ApplicationIcon>
     <AssemblyName>OverflowSim</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="overflow_sim_icon.ico" />
+    <Content Include="Resources\overflow_sim_icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
