@@ -323,7 +323,7 @@ public class SettingsView : Control, IObserver
         _dikeHeightBox.Location = new Point(50, 300);
         _dikeHeightBox.BackColor = Color.FromArgb(100, 100, 100);
         _dikeHeightBox.ForeColor = Color.LightGray;
-        _dikeHeightBox.Text = "Height from NAP (m)";
+        _dikeHeightBox.Text = "Height from GMSL (m)";
         _dikeHeightBox.Font = new Font("Bahnschrift", 11);
 
         //Sea level speed input field

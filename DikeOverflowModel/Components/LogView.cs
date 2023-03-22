@@ -85,7 +85,7 @@ public class LogView : Control, IObservable
         {
             this._logData.Invoke((MethodInvoker)delegate {
                 this._logData.Text = "";
-                this._logData.Text += $"Starting sea height (NAP): {this.WaterHeight}cm\n";
+                this._logData.Text += $"Starting sea height (GMSL): {this.WaterHeight}cm\n";
                 this._logData.Text += $"Height in 50 years: {Math.Round(this.HeightIn50Years, 3)}m\n";
                 this._logData.Text += $"Overflow date: {this.OverflowDate}\n";
                 this._logData.Text += $"Dike height: {this.DikeHeight}\n";
@@ -94,7 +94,7 @@ public class LogView : Control, IObservable
         catch (Exception ex)
         {
             this._logData.Text = "";
-            this._logData.Text += $"Starting sea height (NAP): {this.WaterHeight}cm\n";
+            this._logData.Text += $"Starting sea height (GMSL): {this.WaterHeight}cm\n";
             this._logData.Text += $"Height in 50 years: {Math.Round(this.HeightIn50Years, 3)}m\n";
             this._logData.Text += $"Overflow date: {this.OverflowDate}\n";
             this._logData.Text += $"Dike height: {this.DikeHeight}\n";

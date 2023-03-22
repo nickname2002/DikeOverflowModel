@@ -234,12 +234,24 @@ public class OverflowGraph : Panel, IObservable
     /// <summary>
     /// Calculate the sea level of a specific year.
     /// </summary>
-    /// <param name="year">Amount of years since the start of the simulation.</param>
+    /// <param name="t">Amount of years since the start of the simulation.</param>
     /// <returns></returns>
-    public double CalcSeaLevel(int year)
+    public double CalcSeaLevel(int t)
     {
-        double expGrowth = 1 + (_settings.GrowthExponent / 100);
-        return (SEA_LEVEL + ((_settings.RisingSpeed / 100) * Math.Pow(year, expGrowth))); 
+        double l = SEA_LEVEL;
+        double s = (_settings.RisingSpeed / 100);
+        double i = 1 + (_settings.GrowthExponent / 100);
+        return l + s * Math.Pow(t, i); 
+    }
+
+    /// <summary>
+    /// Calculate the rising speed factor for a specific time.
+    /// </summary>
+    /// <param name="t">Amount of years since the start of the simulation.</param>
+    /// <returns></returns>
+    public double RisingSpeed(int t)
+    {
+        throw new NotImplementedException();
     }
 
     private double NthRoot(double v, double power)
