@@ -489,7 +489,7 @@ public class SettingsView : Control, IObserver
     {
         this._timeSelect.Value = DateTime.Now;
         this._intervalInput.Text = 10.ToString();
-        this._seaExpInput.Text = "0.0";
+        this._seaExpInput.Text = 0.0.ToString();
         this._seaRise.Text = 0.34.ToString();
         this._dikeInput.Text = 1.ToString();
         this._yearAmountInput.Text = 100.ToString();
