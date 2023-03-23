@@ -259,7 +259,29 @@ public class OverflowGraph : Panel, IObservable
     {
         return Math.Pow(v, 1.0 / power);
     }
-    
+
+    // Stolen from https://stackoverflow.com/a/60211022
+    public static double LambertW(double x)
+    {
+        // LambertW is not defined in this section
+        if (x < -Math.Exp(-1))
+            throw new Exception("The LambertW-function is not defined for " + x + ".");
+
+        // computes the first branch for real values only
+
+        // amount of iterations (empirically found)
+        int amountOfIterations = Math.Max(4, (int)Math.Ceiling(Math.Log10(x) / 3));
+
+        // initial guess is based on 0 < ln(a) < 3
+        double w = 3 * Math.Log(x + 1) / 4;
+
+        // Halley's method via eqn (5.9) in Corless et al (1996)
+        for (int i = 0; i < amountOfIterations; i++)
+            w = w - (w * Math.Exp(w) - x) / (Math.Exp(w) * (w + 1) - (w + 2) * (w * Math.Exp(w) - x) / (2 * w + 2));
+
+        return w;
+    }
+
     /// <summary>
     /// Calculate the intersection point of the water level with the height
     /// of the dike.
@@ -267,9 +289,22 @@ public class OverflowGraph : Panel, IObservable
     /// <returns></returns>
     public (double time, double height) CalcIntersectionPoint()
     {
-        double v = (_settings.DikeHeight - SEA_LEVEL) / (_settings.RisingSpeed / 100);
-        double t = NthRoot(v, 1 + (_settings.GrowthExponent / 100));
-        double h = CalcSeaLevel((int)t);
+
+        double v = _settings.DikeHeight - SEA_LEVEL;
+        double l = SEA_LEVEL;
+        double s = (_settings.RisingSpeed / 100); // RisingSpeed from cm to m
+        double i = _settings.GrowthExponent; // percentage of growth per year
+        double tau = 1 / Math.Log(1 + (i / 100));
+
+        double t; // time of intersection
+
+        // alternative formula for when tau is infinite
+        if (double.IsInfinity(tau))
+            t = (v - l) / s;
+        else
+            t = tau * LambertW(v / (s * tau));
+
+        double h = CalcSeaLevel((int)t); // height of intersection
         return (t, h);
     }
 }
