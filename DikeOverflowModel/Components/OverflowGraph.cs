@@ -239,15 +239,10 @@ public class OverflowGraph : Panel, IObservable
     public double CalcSeaLevel(int t)
     {
         double l = SEA_LEVEL;
-        double s = (_settings.RisingSpeed / 100); // current speed in meters
-        double i = _settings.GrowthExponent; // 0.01 = 1% growth per year
-        // to calculate tau from i we use the following formula
-        // tau = 1 / ln(1 + (i/100))
-        // this will find what tau needs to be in order to achieve the growth factor of +1% per year
-        double tau = 1 / Math.Log(1 + (i/100));
+        
         // the formula for the sea level h given t time
         // h = l + e^(t/tau) * s * t
-        return l + Math.Pow(Math.E, t / tau) * s * t;
+        return l + RisingSpeed(t) * t;
     }
 
     /// <summary>
@@ -257,7 +252,15 @@ public class OverflowGraph : Panel, IObservable
     /// <returns></returns>
     public double RisingSpeed(int t)
     {
-        throw new NotImplementedException();
+        double s = _settings.RisingSpeed / 100; // current speed in meters
+        double i = _settings.GrowthExponent; // 0.01 = 1% growth per year
+
+        // to calculate tau from i we use the following formula
+        // tau = 1 / ln(1 + (i/100))
+        // this will find what tau needs to be in order to achieve the growth factor of +i% per year
+        double tau = 1 / Math.Log(1 + (i / 100));
+
+        return Math.Pow(Math.E, t / tau) * s;
     }
 
     /// <summary>
