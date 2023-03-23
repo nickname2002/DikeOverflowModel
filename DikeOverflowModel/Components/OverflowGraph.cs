@@ -239,9 +239,14 @@ public class OverflowGraph : Panel, IObservable
     public double CalcSeaLevel(int t)
     {
         double l = SEA_LEVEL;
-        double s = (_settings.RisingSpeed / 100);
-        double i = _settings.GrowthExponent;
+        double s = (_settings.RisingSpeed / 100); // current speed in meters
+        double i = _settings.GrowthExponent; // 0.01 = 1% growth per year
+        // to calculate tau from i we use the following formula
+        // tau = 1 / ln(1 + (i/100))
+        // this will find what tau needs to be in order to achieve the growth factor of +1% per year
         double tau = 1 / Math.Log(1 + (i/100));
+        // the formula for the sea level h given t time
+        // h = l + e^(t/tau) * s * t
         return l + Math.Pow(Math.E, t / tau) * s * t;
     }
 
@@ -255,12 +260,11 @@ public class OverflowGraph : Panel, IObservable
         throw new NotImplementedException();
     }
 
-    private double NthRoot(double v, double power)
-    {
-        return Math.Pow(v, 1.0 / power);
-    }
-
-    // Stolen from https://stackoverflow.com/a/60211022
+    /// <summary>
+    /// Lambert W function for solving equations in the form of ye^y=x from https://stackoverflow.com/a/60211022
+    /// </summary>
+    /// <param name="x">x from ye^y=x</param>
+    /// <returns>y from ye^y=x</returns>
     public static double LambertW(double x)
     {
         // LambertW is not defined in this section
@@ -298,7 +302,9 @@ public class OverflowGraph : Panel, IObservable
 
         double t; // time of intersection
 
-        // alternative formula for when tau is infinite
+        // if tau is infinite (meaning i = 0,0), e^(t/tau) becomes 1, so we can use a simpler formula.
+        // if tau is non infinite, we use LambertW to solve the h = l + e^(x/tau)*s*x because it is in the form xe^x
+        // so t = tau * Wn( (h-l) / (s*tau) )
         if (double.IsInfinity(tau))
             t = (v - l) / s;
         else
