@@ -240,8 +240,9 @@ public class OverflowGraph : Panel, IObservable
     {
         double l = SEA_LEVEL;
         double s = (_settings.RisingSpeed / 100);
-        double i = 1 + (_settings.GrowthExponent / 100);
-        return l + s * Math.Pow(t, i); 
+        double i = _settings.GrowthExponent;
+        double tau = 1 / Math.Log(1 + (i/100));
+        return l + Math.Pow(Math.E, t / tau) * s * t;
     }
 
     /// <summary>
